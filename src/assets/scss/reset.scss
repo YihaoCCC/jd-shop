@@ -1,0 +1,46 @@
+body,div,p,h1,h2,h3,h4,h5,h6,ul,li,dl,dt,a,input,button,textarea,select{
+    margin: 0;
+    padding: 0;
+    outline: none;
+  }
+  html,body{
+    font-family:Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
+    color: #333333;
+    background-color: #ffffff;
+    min-width: 1226px;
+    font-size: 14px;
+  }
+  a{
+    text-decoration: none;
+  }
+  ul,li{
+    list-style: none;
+  }
+  input{
+    font: normal;
+  }
+  input:focus,a:focus{
+    outline: none;
+  }
+  span{
+    cursor: pointer;
+    &:hover {
+        color: #E1251B;
+        &::after {
+            color: #999;
+        }
+    }
+  }
+  a{
+    &:hover {
+      color: #E1251B;
+    }
+  }
+  svg{
+      cursor: pointer;
+  }
+  .safeContent {
+      width: 1190px ;
+      margin: auto;
+  }
+  
