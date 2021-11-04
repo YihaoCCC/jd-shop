@@ -7,7 +7,7 @@
         点场 距结束
         <div class="timeContent">
           <div class="timmer">
-            {{ hour }}
+            00
           </div>
           :
           <div class="timmer">
@@ -55,22 +55,31 @@ export default {
   methods: {
     getNowDate() {
       //获取当前时间
-      let endTime =  new Date()
-      // let nowTime = new Date().getTime()
-      // 设置结束时的时间
-      this.time = endTime.getHours() + 1
-      let data1 = new Date().getTime() 
-      // 整点场时间+1个小时
-      endTime.setTime(data1 + 3600000)  
-      // 设置截至时间 (后一个小时)
-      // setInterval(() => {
-      //   this.second += 1
-      //   // let leftTime = endTime - nowTime
-      //   // this.munite = leftTime.getMinutes()
-      //   // this.second = leftTime.getSeconds()
-      //   // console.log(leftTime)
-      // },1000)
-      console.log(endTime)
+      let nowTime  = new Date()
+      // 定义截至时间小时
+      let endTimeHour
+      if(nowTime.getHours() !== 23) {
+        endTimeHour = nowTime.getHours() + 1
+      } else {
+        endTimeHour = 0
+      }
+      // 定义截至时间对象 下一个小时0分0秒
+      this.time = endTimeHour
+      let endTime = new Date()
+      endTime.setHours(endTimeHour)
+      endTime.setMinutes(0)
+      endTime.setSeconds(0)
+
+      // 定义定时器 每一秒进行运行
+      setInterval(() => {
+      let Time = new Date()//每次获取当前时间
+      let time = endTime - Time //计算差值
+      this.munite = Math.floor(time/(60000)%60)    //计算分钟数
+       
+      this.second = Math.floor(time/1000%60);  //计算秒数
+      
+      },1000)
+      
     }
   },
   data() {
