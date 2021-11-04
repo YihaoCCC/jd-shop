@@ -9,5 +9,8 @@
 <style scoped lang='scss'>
 .footer {
     height: 100px;
+    margin-top: 10px;
+    border-top: 1px solid red;
+
 }
 </style>
