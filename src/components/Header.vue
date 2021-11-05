@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="headerContent safeContent">
-            <div class="leftLogo"></div>
+            <div class="leftLogo" @click="backToIndex"></div>
             <div class="center">
                 <div class="centerTop">
                     <div class="searchLine">
@@ -83,6 +83,11 @@ export default {
     data() {
         return {
             
+        }
+    },
+    methods: {
+        backToIndex() {
+            this.$router.push('/')
         }
     }
 }

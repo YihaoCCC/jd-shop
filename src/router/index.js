@@ -18,12 +18,20 @@ const router = new Router({
                 {
                     path: '/myCart',
                     component: () => import('@/pages/cart')
-                }
+                },
+                {
+                    path: '/detail',
+                    component: () => import('@/pages/detail')
+                }    
             ]
         },
         {
             path: '/login',
             component: () => import('@/pages/login')
+        },
+        {
+            path: '/detail',
+            component: () => import('@/pages/detail')
         }    
     ]
 })

@@ -136,7 +136,7 @@ export default {
                 text-align: center;
                 background: linear-gradient(180deg,rgba(255,255,255,.8) 0,white 35%,white);
                 opacity: 0;
-                translate: all 0.5s;
+                transition: all 1s;
                 .findMore{
                     background-color: black;
                     width: 120px;

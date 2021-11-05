@@ -23,7 +23,7 @@
     <div class="secondBuyContent">
       <el-carousel trigger="click" :autoplay='false' height="260px">
         <el-carousel-item v-for="(x,index) in secondList" :key="index">
-          <div class="listItem" v-for="item in x" :key="item.id">
+          <div class="listItem" v-for="item in x" :key="item.id" @click="goToDetail(item)">
             <img :src="item.imgUrl" alt="">
             <span>{{item.title}}</span>
             <em>{{item.price | price}}</em>
@@ -80,6 +80,14 @@ export default {
       
       },1000)
       
+    },
+    goToDetail(item) {
+      this.$router.push({
+        path:'/detail',
+        query: {
+          detail: item
+        }
+      })
     }
   },
   data() {
