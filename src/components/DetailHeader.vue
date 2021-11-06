@@ -34,9 +34,9 @@ export default {
     top: 0px;
     height: 70px;
     line-height: 70px;
-    border-top:1px solid  #e5e5e5;
+    border-top:0.6px solid  #e5e5e5;
     background: #ffffff;
-
+    box-shadow: 0 5px 5px #e5e5e5;
     .container{
         display: flex;
         justify-content:space-between;
@@ -58,9 +58,6 @@ export default {
                 &:last-of-type::after{
                     content: '';
                 }
-                // &:last-child:after{
-                //     content: '';
-                // }
             }
             
         }
