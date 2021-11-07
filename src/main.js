@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import axios from 'axios'
 import router from './router'
-import { Carousel,CarouselItem, Backtop, Icon } from "element-ui";
+import { Carousel,CarouselItem, Backtop, Icon, Message } from "element-ui";
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false
@@ -16,6 +16,8 @@ Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Backtop)
 Vue.use(Icon)
+Vue.prototype.$message = Message
+// Vue.component(Message.name,Message);
 
 Vue.use(axios)
 

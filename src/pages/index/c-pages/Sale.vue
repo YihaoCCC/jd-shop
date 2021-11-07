@@ -2,7 +2,7 @@
     <div class="saleContent">
         <div class="container">
             <div class="left">
-                <div class="items" v-for="item in salesList" :key="item.id" >
+                <div class="items" v-for="item in salesList" :key="item.id" @click="GoToSalePart" >
                     <img :src="item.imgUrl" alt="">
                     <div class="title">
                         <p>{{item.title}}
@@ -86,6 +86,12 @@
                         imgUrl: 'https://img14.360buyimg.com/img/s260x260_jfs/t1/171106/30/21116/570173/617b9e6fE4f7d4a12/ea7d6170440e6e2c.jpg!cc_130x130.webp'
                     },
                 ]
+            }
+        },
+        methods: {
+            GoToSalePart() {
+                
+                this.$message.warning('售卖详情页面没有需求');
             }
         }
     }

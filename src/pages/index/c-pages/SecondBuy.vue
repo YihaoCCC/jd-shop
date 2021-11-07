@@ -237,7 +237,7 @@ export default {
         height: 260px;
         text-align: center;
         box-sizing: border-box;  
-        
+        cursor: pointer;
         &::after {
             position: absolute;
             height: 1px;

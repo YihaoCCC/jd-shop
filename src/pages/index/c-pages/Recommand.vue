@@ -1,6 +1,6 @@
 <template>
     <div class="floatImgBox">
-        <div class="item" v-for="item in recommendList " :key="item.id">
+        <div class="item" v-for="item in recommendList " :key="item.id" @click="GoToDetail(item)">
             
             <img :src="item.imgUrl" :alt="item.title">
             
@@ -68,6 +68,16 @@ export default {
         pirce(pirce) {
             return `￥${pirce.toFixed(2)}`
         }
+    },
+    methods: {
+        GoToDetail(item) {
+            this.$router.push({
+                path: '/detail',
+                query: {
+                    detail: item
+                }
+            })
+        }
     }
 }
 </script>
@@ -79,6 +89,7 @@ export default {
         padding: 18px 0 30px 0;
         box-sizing: border-box;
         .item {
+            cursor: pointer;
             text-align: center;
             width: 220px;
             height: 312px;
