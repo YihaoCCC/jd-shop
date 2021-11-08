@@ -10,7 +10,7 @@
 <script>
 import Header from '../components/Header.vue'
 import HeaderBar from '../components/HeaderBar.vue'
-import Footer from '../components/footer.vue'
+import Footer from '../components/Footer'
 export default {
   components: { 
       HeaderBar,
