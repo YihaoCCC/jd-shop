@@ -30,9 +30,24 @@ const router = new Router({
             component: () => import('@/pages/login')
         },
         {
-            path: '/detail',
-            component: () => import('@/pages/detail')
-        }    
+            path: '/order',
+            component: () => import('@/pages/order'),
+            children: [
+                {
+                    path: 'confirm',
+                    component: () => import('@/pages/orderConfirm')
+                },
+                {
+                    path: 'pay',
+                    component: () => import('@/pages/orderPay')
+                },
+                {
+                    path: 'list',
+                    component: () => import('@/pages/orderList')
+                }   
+            ]
+        }
+
     ]
 })
 export default router

@@ -22,11 +22,21 @@
    <div class="loadMore">
        <button>加载更多</button>
    </div>
+   <model
+    :IsShow="isShow"
+    :btnType="1"
+    content="添加购物车成功！"
+    SureText="查看购物车"
+    @CancelClick='cancel()'
+    @SureClick = 'sure()'
+   ></model>
 </div>
 
 </template>
 <script>
+import Model from '../../../components/Model.vue'
 export default {
+  components: { Model },
     name: 'Recommand',
     data() {
         return {
@@ -102,7 +112,8 @@ export default {
                     imgUrl: 'https://img20.360buyimg.com/jdcms/s300x300_jfs/t1/205589/26/14187/204557/6185fc40Ec5a9c82c/12bf7822356bae59.jpg.webp'
                 },
 
-            ]
+            ],
+            isShow: false,
         }
     },
     filters: {
@@ -120,7 +131,14 @@ export default {
             })
         },
         AddToCart(item) {
+            this.isShow = true
             console.log(item)
+        },
+        cancel() {
+            this.isShow = false
+        },
+        sure() {
+            this.$router.push('/myCart')
         }
     }
 }
@@ -233,11 +251,11 @@ export default {
             height: 50px;
             border-radius: 20px;
             background-color: $colorA;
-            border: 1px solid #fff;
+            border: 2px solid #fff;
             color: #fff;
             font-size: 16px;
             &:hover {
-                border: 1px solid $colorA;
+                border: 2px solid $colorA;
             }
         }
     }

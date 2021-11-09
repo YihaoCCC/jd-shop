@@ -20,7 +20,7 @@
                 <span>企业采购</span>
                 <span>京东会员</span>
                 <span>我的京东</span>
-                <span>我的订单</span>
+                <span @click="GoToOrder">我的订单</span>
                 <span @click="gotoCart">购物车</span>
                 
             </div>
@@ -43,6 +43,9 @@ export default {
         },
         toLogin() {
             this.$router.push('/login')
+        },
+        GoToOrder() {
+            this.$router.push('/order/list')
         }
     }
 }
