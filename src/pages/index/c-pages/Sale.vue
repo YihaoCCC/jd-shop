@@ -123,6 +123,7 @@
                 width: 190px;
                 height: 210px;
                 display: inline-block;
+                cursor: pointer;
                 margin: 0 10px 10px 0;
                 background-image: url('../../../assets/imgs/items-box-bg.webp');
                 background-size: cover;

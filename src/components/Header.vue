@@ -36,10 +36,7 @@
                         0q-15.36 0-25.6-7.68t-16.896-18.432-9.216-23.04-2.56-22.528q0-20.48 13.824-33.792t37.376-12.288l103.424 0q20.48 0 32.768 6.144t19.456 15.36 10.24 18.944 5.12 16.896q2.048 8.192 4.096 23.04t4.096 30.208q3.072 18.432 6.144 38.912l700.416 0zM892.928 302.08l-641.024-2.048 
                         35.84 185.344 535.552 1.024z" p-id="7069" fill="#E1251B"></path></svg>
                         <span>我的购物车</span>
-                    </div>
-                    
-               
-                
+                    </div>    
                     </div>
                     <div class="navBar">
                         <span>抢五折家具</span>
@@ -109,9 +106,9 @@ export default {
             height: 100%;
             width: 190px; 
             display: inline-block;
-            background-image: url('../assets/imgs/logo.png') ;
-            background-repeat: no-repeat ;
-            background-position: 0 0;
+            background-image: url('../assets/imgs/index-logo.png') ;
+            background-size: contain;
+            cursor: pointer;
         }
         .center {
             width: 780px;

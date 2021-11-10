@@ -1,7 +1,11 @@
 <template>
     <div>
         <header-bar></header-bar>
-        <order-header></order-header>
+        <order-header HeaderTitle="我的订单">
+            <template v-slot:description>
+                <span>您的所有订单，了解更多></span>
+            </template>
+        </order-header>
         <div class="safeContent">
             <router-view></router-view>
         </div>

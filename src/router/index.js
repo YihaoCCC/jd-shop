@@ -14,16 +14,16 @@ const router = new Router({
                 {
                     path: '/index',
                     component: Index                
-                },
-                {
-                    path: '/myCart',
-                    component: () => import('@/pages/cart')
-                },
+                },   
                 {
                     path: '/detail',
                     component: () => import('@/pages/detail')
                 }    
             ]
+        },
+        {
+            path: '/myCart',
+            component: () => import('@/pages/cart')
         },
         {
             path: '/login',
