@@ -10,16 +10,16 @@
                  fill="#E1251B"></path>
                  </svg>
                 
-                <span>天津</span>
+                <span >天津</span>
             </div>
             <div class="right">
                 <span @click="toLogin">你好，请登录</span>
-                <span>手机京东</span>
-                <span>网站导航</span>
-                <span>客户服务</span>
-                <span>企业采购</span>
-                <span>京东会员</span>
-                <span>我的京东</span>
+                <span @click="noneEvent">手机访问</span>
+                <span @click="noneEvent">网站导航</span>
+                <span @click="noneEvent">客户服务</span>
+                <span @click="noneEvent">企业采购</span>
+                <span @click="noneEvent">达达会员</span>
+                <span @click="noneEvent">我的商城</span>
                 <span @click="GoToOrder">我的订单</span>
                 <span @click="gotoCart">购物车</span>
                 
@@ -66,6 +66,9 @@ export default {
         },
         GoToOrder() {
             this.$router.push('/order/list')
+        },
+        noneEvent() {
+            this.$message.warning('该功能暂未开放')
         }
     }
 }

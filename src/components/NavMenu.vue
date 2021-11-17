@@ -7,7 +7,7 @@
           <ul v-for="(item, index) in menuList" :key="index">
             <li v-for="(sub, j) in item" :key="j">
               <a :href="sub ? '/#/product/' + sub.id : ' '">
-                {{ sub ? sub.name : "京東商城测试" }}
+                {{ sub ? sub.name : "达达利亚商城" }}
               </a>
             </li>
           </ul>

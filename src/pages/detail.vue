@@ -62,20 +62,27 @@
                             </div>
                         </div>
                     </div>
+                </div>   
+            </div>
+            <div class="userComment safeContent">
+                <div class="commentHeader">
+                    商品评价
                 </div>
+                <comment v-for="item in 4" :key="item" ></comment>
             </div>
         </div>
     </div>
 </template>
 <script>
 import DetailHeader from '../components/DetailHeader.vue'
-
+import Comment from '@/components/Comment'
 export default {
     mounted() {
        this.detail = this.$route.query.detail
     },
     components: {
         DetailHeader,
+        Comment
     },
     data() {  
         return {
@@ -132,12 +139,11 @@ button {
 }
 .detailContent {
     background-color: #fff;
-    display: flex;
-    justify-content: space-between;
     .content {
         display: flex;
         justify-content: space-between;
-        padding: 30px 0;
+        padding: 30px 0 0 0;
+        
     }
     .leftContent {
         width: 450px;
@@ -284,6 +290,21 @@ button {
                 }
 
             }
+    }
+    .userComment {
+        padding-bottom: 20px;
+
+        .commentHeader {
+            height: 45px;
+            border: 1px solid #e5e5b9;
+            background-color: #e5e5e5;
+            line-height: 45px;
+            color: #666;
+            font-size: 15px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            font-weight: bolder;
+        }
     }
    
 }
