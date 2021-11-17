@@ -1,7 +1,7 @@
 <template>
     <div class="orderHeader">
         <div class="safeContent">
-            <div class="logo"></div>
+            <div class="logo" @click="GoToIndex"></div>
             <div class="title">
                 {{ HeaderTitle}}
             </div>
@@ -23,6 +23,11 @@
              type: String,
              default: '这是页面的描述文字'
          }
+     },
+     methods: {
+         GoToIndex() {
+             this.$router.push('/')
+         }
      }
  }
 </script>
@@ -30,7 +35,7 @@
 .orderHeader {
     background-color: #fff;
     height: 80px;
-    padding: 15px 0;
+    padding: 5px 0;
     box-sizing: border-box;
     .safeContent {
         display: flex;
@@ -38,10 +43,10 @@
         justify-content: space-between;
     }
     .logo {
-        width: 125px;
-        height: 40px;
-        background: url('../assets/imgs/login-logo.png');
-        background-size: contain;
+        width: 180px;
+        height: 70px;
+        background: url('../assets/imgs/logo-banner-desgin.png');
+        background-size: cover;
         background-repeat: no-repeat;
         cursor: pointer;
         margin-right: 20px;

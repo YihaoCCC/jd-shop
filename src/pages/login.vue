@@ -1,8 +1,8 @@
 <template>
   <div class="login">
     <div class="login-header safeContent">
-      <div style="box-sizing: border-box cursur:pointer" @click="toIndex">
-        <img src="../assets/imgs/login-logo.png" alt="" />
+      <div style="box-sizing: border-box; cursur:pointer; display:flex; align-items:center" @click="toIndex">
+        <img src="../assets/imgs/logo-desgin.png" alt="" />
         <span>欢迎登陆</span>
       </div>
 
@@ -174,10 +174,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 10px 0 0 0;
     box-sizing: border-box;
+    img {
+      width: 180px;
+      height: 95px;
+    }
     span {
-      margin-left: 30px;
       font-size: 24px;
       color: #666;
       display: inline-block;

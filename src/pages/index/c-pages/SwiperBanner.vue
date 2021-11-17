@@ -26,7 +26,7 @@
    <div class="rightNav">
     <div class="rightNavInfo">
         <div class="userInfoTop">
-            <img src="../../../assets/imgs/touxiang.png" alt="">
+            <img src="../../../assets/imgs/avatar.png" alt="">
             <div class="info">
                 Hi ~欢迎逛京东！
                 <div class="nologin" >

@@ -106,8 +106,8 @@ export default {
             height: 100%;
             width: 190px; 
             display: inline-block;
-            background-image: url('../assets/imgs/index-logo.png') ;
-            background-size: contain;
+            background-image: url('../assets/imgs/logo-desgin.png') ;
+            background-size: cover;
             cursor: pointer;
         }
         .center {
