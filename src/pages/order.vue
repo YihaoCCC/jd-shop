@@ -1,9 +1,9 @@
 <template>
     <div>
         <header-bar></header-bar>
-        <order-header HeaderTitle="我的订单">
+        <order-header :HeaderTitle="title">
             <template v-slot:description>
-                <span>您的所有订单，了解更多></span>
+                <span>{{message}}></span>
             </template>
         </order-header>
         <div class="safeContent">
@@ -26,9 +26,28 @@ import OrderHeader from '../components/OrderHeader.vue'
           ServiceBar,
           OrderHeader
      },
-          ServiceBardata() {
+    data() {
          return {
+             title: '订单确认',
+             message: '请谨防钓鱼链接或诈骗电话，了解更多'
+         }  
+     },
+     watch: {
+         $route :{
+            immediate: true,
+            handler: function(val){
+            if( val.fullPath === '/order/Pay' ) {
+                this.title = '订单支付'
+                this.message = '请在30分钟内完成付款，注意付款时间'
+            } else if(val.fullPath === '/order/List'){
+                this.title = '订单列表'
+                this.message = '这里显示了您的所有订单'
+            }
+            },
+            // 深度观察监听
+            deep: true
 
+            
          }
      }
  }

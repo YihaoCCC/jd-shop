@@ -10,6 +10,9 @@
                 </div>
                 <div class="content">
                     {{content}}
+                    <slot name='body'>
+
+                    </slot>
                 </div>
                 <div class="footer">
                     <button class="btnSure" v-if="btnType === 1" @click="$emit('SureClick')" >{{SureText}}</button>
@@ -35,8 +38,7 @@
                 default: 3
             },
             content: {
-                typeof: String,
-                default: '默认文字'
+                typeof: String
             },
             SureText: {
                 type: String,

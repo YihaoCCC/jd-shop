@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="detail-btn">                      
-                            <button  @click="addCart"> 加入购物车</button>
+                            <button  @click="GoOrderConfrim"> 立即购买</button>
                             <div class="btn-like">
                                 喜欢
                             </div>
@@ -120,6 +120,9 @@ export default {
                 console.log(this.total.length);
                 this.version=index;
                 this.total=item;     
+        },
+        GoOrderConfrim() {
+            this.$router.push('/order/confirm')
         }
     }
 }

@@ -20,8 +20,8 @@
             <!-- 推荐部分 -->
             <recommand></recommand>
             <!-- 服务条款 -->
-            <service-bar/>
         </div>
+        <service-bar/>
         
     </div>
 </template>

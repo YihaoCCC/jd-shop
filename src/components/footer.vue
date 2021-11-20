@@ -40,7 +40,6 @@
 
 <style scoped lang='scss'>
 .footer {
-    margin-top: 20px;
     border-top: 1px solid red;
     padding: 20px 0 ;
     box-sizing: border-box;

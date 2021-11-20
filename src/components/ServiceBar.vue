@@ -1,9 +1,11 @@
 <template>
-    <div class="service">   
-        <div class="serviceItem" v-for="(item,index) in service" :key="index" >
-            <div class=" items" :class="item.name"></div>
-            <p>{{item.title}}</p>
-        </div>
+    <div class="service">
+        <div class="safeContent">
+            <div class="serviceItem" v-for="(item,index) in service" :key="index" >
+                <div class=" items" :class="item.name"></div>
+                <p>{{item.title}}</p>
+            </div>
+        </div>   
     </div>
 </template>
 <script>
@@ -35,7 +37,11 @@
 </script>
 
 <style scoped lang='scss'>
-.service{ 
+.service {
+    background-color: #fff;
+    padding: 20px 0;
+}
+.safeContent{ 
     display: flex;
     .serviceItem {   
         width: 297px;

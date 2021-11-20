@@ -32,11 +32,13 @@
  }
 </script>
 <style scoped lang='scss'>
+@import '../assets/scss/config.scss';
 .orderHeader {
     background-color: #fff;
     height: 80px;
     padding: 5px 0;
     box-sizing: border-box;
+    border-bottom: 2px solid $colorA;
     .safeContent {
         display: flex;
         align-items: center;
