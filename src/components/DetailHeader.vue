@@ -43,6 +43,10 @@ export default {
         .pro-title{
                 font-size: 16px;
                 font-weight: bold;
+                width: 500px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
         .pro-param{
             font-size: 14px;

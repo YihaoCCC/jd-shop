@@ -43,6 +43,13 @@ export default {
         return {
             
         }
+    },
+    mounted() {
+        this.yhRequest.get('https://api.muxiaoguo.cn/api/meinvtu',{
+            params: {
+                num: 10
+            }
+        })
     }
 }
 </script>

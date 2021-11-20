@@ -348,9 +348,6 @@
             color:$colorA;
             font-weight:bold;
         }
-        .nameDetail{
-
-        }
     }
     .detail{
         border-top: 1px solid #e5e5e5 ;
