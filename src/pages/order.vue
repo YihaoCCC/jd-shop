@@ -34,6 +34,7 @@ import OrderHeader from '../components/OrderHeader.vue'
      },
      watch: {
          $route :{
+             // 立即执行
             immediate: true,
             handler: function(val){
             if( val.fullPath === '/order/Pay' ) {
@@ -46,8 +47,6 @@ import OrderHeader from '../components/OrderHeader.vue'
             },
             // 深度观察监听
             deep: true
-
-            
          }
      }
  }

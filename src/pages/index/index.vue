@@ -44,13 +44,6 @@ export default {
             
         }
     },
-    mounted() {
-        this.yhRequest.get('https://api.muxiaoguo.cn/api/meinvtu',{
-            params: {
-                num: 10
-            }
-        })
-    }
 }
 </script>
 <style scoped lang='scss'>

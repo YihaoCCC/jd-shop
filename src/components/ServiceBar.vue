@@ -40,6 +40,7 @@
 .service {
     background-color: #fff;
     padding: 20px 0;
+    margin-top: 30px;
 }
 .safeContent{ 
     display: flex;

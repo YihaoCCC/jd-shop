@@ -78,7 +78,9 @@ import DetailHeader from '../components/DetailHeader.vue'
 import Comment from '@/components/Comment'
 export default {
     mounted() {
-       this.detail = this.$route.query.detail
+    //    this.detail = this.$route.query.detail
+        this.getGoodsDetail()
+        console.log(this.$route.params.id)
     },
     components: {
         DetailHeader,
@@ -106,6 +108,9 @@ export default {
         }
     },
     methods: {
+        getGoodsDetail() {
+            this.yhrequest.get('/api/goods/goodsDetail')
+        },
         addCart(){
                 // this.axios.post('/carts',{
                 //     productId:this.$route.params.id,

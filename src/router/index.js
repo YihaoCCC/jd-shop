@@ -16,7 +16,7 @@ const router = new Router({
                     component: Index                
                 },   
                 {
-                    path: '/detail',
+                    path: '/detail/:id',
                     component: () => import('@/pages/detail')
                 }    
             ]

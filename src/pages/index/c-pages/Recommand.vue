@@ -19,8 +19,8 @@
             </div>       
         </div> 
     </div>
-   <div class="loadMore">
-       <button>加载更多</button>
+   <div class="loadMore" v-show="showMore">
+       <button @click="LoadMore" >加载更多</button>
    </div>
    <model
     :IsShow="isShow"
@@ -40,6 +40,8 @@ export default {
     name: 'Recommand',
     data() {
         return {
+            pageNum: 1,
+            showMore: true,
             recommendList: [
                 {
                     id: 1,
@@ -121,13 +123,22 @@ export default {
             return `￥${pirce.toFixed(2)}`
         }
     },
+    mounted() {
+        this.getGoods()
+    },
     methods: {
         GoToDetail(item) {
-            this.$router.push({
-                path: '/detail',
-                query: {
-                    detail: item
+            this.yhRequest.get(`/api/goods/goodsDetail/${item.id}`).then(() => {
+                this.$router.push(`/detail/${item.id}`)
+            })
+        },
+        getGoods() {
+            this.yhRequest.get(`/api/goods/pageNum/${this.pageNum}`).then((res) => {
+                if( !res.length ) {
+                    this.$message.warning('数据已经到底了哦')
+                    this.showMore = false
                 }
+                console.log(res)
             })
         },
         AddToCart(item) {
@@ -139,6 +150,10 @@ export default {
         },
         sure() {
             this.$router.push('/myCart')
+        },
+        LoadMore() {
+            this.pageNum ++;
+            this.getGoods()
         }
     }
 }
