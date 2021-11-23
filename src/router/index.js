@@ -30,6 +30,10 @@ const router = new Router({
             component: () => import('@/pages/login')
         },
         {
+            path: '/register',
+            component: () => import('@/pages/register')
+        },
+        {
             path: '/order',
             component: () => import('@/pages/order'),
             children: [

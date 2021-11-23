@@ -135,8 +135,8 @@
                         <span>微信</span>
                     </div>
                 </div>
-                <div class="register">
-                    <span style="font-weight: bolder;color: #e1251B">立即注册</span>
+                <div class="register" @click="GoRegister">
+                    <span style="font-weight: bolder;color: #e1251B" >立即注册</span>
                 </div>
             </div>
         </div>
@@ -163,7 +163,11 @@ export default {
       },
       toIndex() {
           this.$router.push('/')
+      },
+      GoRegister() {
+        this.$router.push('/register')
       }
+  
   }
 };
 </script>
@@ -310,7 +314,15 @@ export default {
                     }
                 }
             }
-            
+            .register  {
+                span {
+                  display: inline-block;
+                  transition: all .3s;
+                }
+                span:hover {
+                    transform: scale(1.2);
+                }
+            }
         }
     }
   }
