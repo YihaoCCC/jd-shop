@@ -1,14 +1,16 @@
 <template>
     <div class="orderHeader">
         <div class="safeContent">
-            <div class="logo" @click="GoToIndex"></div>
+            <div class="logo" @click="GoToIndex">
+                <img src="../assets/imgs/logo-banner-desgin.png" alt="" title="点击回到主页">
+            </div>
             <div class="title">
                 {{ HeaderTitle}}
             </div>
             <div class="description">
                <slot name='description'></slot>
             </div>
-            <span>username</span>
+            <span>{{userName}}</span>
         </div>
     </div>
 </template>
@@ -22,6 +24,13 @@
          description: {
              type: String,
              default: '这是页面的描述文字'
+         }
+     },
+     computed: {
+         userName: {
+             get() {
+                 return this.$store.state.user.userName
+             }
          }
      },
      methods: {
@@ -47,11 +56,12 @@
     .logo {
         width: 180px;
         height: 70px;
-        background: url('../assets/imgs/logo-banner-desgin.png');
-        background-size: cover;
-        background-repeat: no-repeat;
         cursor: pointer;
         margin-right: 20px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
     .title {
         font-size: 26px;

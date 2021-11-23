@@ -2,7 +2,7 @@
   <div class="login">
     <div class="login-header safeContent">
       <div style="box-sizing: border-box; cursur:pointer; display:flex; align-items:center" @click="toIndex">
-        <img src="../assets/imgs/logo-desgin.png" alt="" />
+        <img src="../assets/imgs/logo-desgin.png" alt="" title="点击回到主页" />
         <span>欢迎登陆</span>
       </div>
 
@@ -159,6 +159,15 @@ export default {
   },
   methods: {
       login() {
+          this.yhRequest.get(`/api/user/login/${this.username}&${this.password}`).then((res) => {
+            if(res) {
+              this.$cookie.set('userId',res.userId,{expires:'Session'})
+              this.$store.dispatch('saveUser', res)
+              this.$router.push('/')
+            } else {
+              this.$message.error('登录失败，请检查账号密码')
+            }
+          })
           console.log(this.username+this.password)
       },
       toIndex() {

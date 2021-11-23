@@ -9,6 +9,18 @@
 
 export default {
   name: 'App',
+  mounted() {
+     if(this.$cookie.get('userId')){
+      this.getUser(this.$cookie.get('userId'));
+    }
+  },
+  methods: {
+    getUser(id){
+      this.yhRequest.get(`/api/user/${id}`).then((res)=>{
+            this.$store.dispatch('saveUser',res)
+      })
+    },
+  }
  
 }
 </script>

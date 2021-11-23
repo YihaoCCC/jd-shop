@@ -30,23 +30,24 @@
             <div class="info">
                 Hi ~欢迎逛京东！
                 <div class="nologin" >
-                    <p>登陆 | 注册</p>
+                    <p v-if="!userName" @click="GoLogin">登陆 | 注册</p>
+                    <p v-else>{{userName}}</p>
                 </div>
             </div>
         </div>
         <div class="userInfoBottom">
             <div class="newPerson">
-                <a href="">新人福利</a>
+                <a href="">个人中心</a>
             </div>
             <div class="PlusVip">
-                <a href="">PLUS会员</a>
+                <a href="">哒哒会员</a>
             </div>
         </div> 
     </div>
     <div class="rightNavInfo">
         <div class="newsTop">
             <span>
-                京东快报
+                哒哒快报
             </span>
             <a href=""> 更多 > </a>
         </div>
@@ -120,6 +121,13 @@ import NavMenu from '@/components/NavMenu';
 export default {
     components: {
         NavMenu
+    },
+    computed: {
+      userName: {
+        get() {
+          return this.$store.state.user.userName
+        }
+      }
     },
   data() {
     return {
@@ -207,24 +215,29 @@ export default {
       news: [
           {
               id: 1,
-              content: '这是我们组的京东商城，测试商城，这是新闻的测试用例'
+              content: '达达利亚商城，测试商城，这是新闻的测试用例'
           },
            {
               id: 2,
-              content: '这是我们组的京东商城，测试商城，这是新闻的测试用例'
+              content: '达达利亚商城，测试商城，这是新闻的测试用例'
           },
            {
               id: 3,
-              content: '这是我们组的京东商城，测试商城，这是新闻的测试用例'
+              content: '达达利亚商城，测试商城，这是新闻的测试用例'
           },
 
            {
               id: 4,
-              content: '这是我们组的京东商城，测试商城，这是新闻的测试用例'
+              content: '达达利亚商城，测试商城，这是新闻的测试用例'
           },
       ]
     };
   },
+  methods: {
+    GoLogin() {
+      this.$router.push('/login')
+    }
+  }
 };
 </script>
 

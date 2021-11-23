@@ -13,13 +13,14 @@
                 <span >天津</span>
             </div>
             <div class="right">
-                <span @click="toLogin">你好，请登录</span>
+                <span @click="toLogin" v-if="!userName">你好，请登录</span>
+                <span  v-else >{{userName}}</span>
                 <span @click="noneEvent">手机访问</span>
                 <span @click="noneEvent">网站导航</span>
                 <span @click="noneEvent">客户服务</span>
                 <span @click="noneEvent">企业采购</span>
-                <span @click="noneEvent">达达会员</span>
-                <span @click="noneEvent">我的商城</span>
+                <span @click="noneEvent">哒哒会员</span>
+                <span @click="noneEvent">我的收藏</span>
                 <span @click="GoToOrder">我的订单</span>
                 <span @click="gotoCart">购物车</span>
                 
@@ -28,6 +29,7 @@
     </div>
 </template>
 <script>
+
 export default {
     data() {
         return {
@@ -35,8 +37,15 @@ export default {
             showBack: false
         }
     },
+    computed: {
+        userName: {
+            get() {
+                return this.$store.state.user.userName
+            }
+        }
+    },
     mounted(){
-            console.log()
+        
     },
     watch:{
         $route: {
@@ -49,9 +58,7 @@ export default {
             }
             },
             // 深度观察监听
-            deep: true
-
-            
+            deep: true   
         }
     },
     methods: {

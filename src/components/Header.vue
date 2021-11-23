@@ -1,7 +1,9 @@
 <template>
     <div class="header">
         <div class="headerContent safeContent">
-            <div class="leftLogo" @click="backToIndex"></div>
+            <div class="leftLogo" @click="backToIndex">
+                <img src="../assets/imgs/logo-desgin.png" alt="" title="点击回到主页">
+            </div>
             <div class="center">
                 <div class="centerTop">
                     <div class="searchLine">
@@ -104,10 +106,11 @@ export default {
         justify-content: space-between;
        .leftLogo {
             height: 100%;
-            width: 190px; 
-            display: inline-block;
-            background-image: url('../assets/imgs/logo-desgin.png') ;
-            background-size: cover;
+            width: 210px; 
+            img {
+                width: 100%;
+                height: 100%;
+            }
             cursor: pointer;
         }
         .center {
@@ -143,12 +146,17 @@ export default {
                                 }
                             }
                             .search {
+                                cursor: pointer;
                                 width: 58px;
                                 height: 32px;
                                 background-color: $colorA;
                                 text-align: center;
                                 svg{
                                     margin-top: 5px;
+                                    transition: all .5s;
+                                    &:hover {
+                                        transform: scale(1.2);
+                                    }
                                 }
                             }
                         }
