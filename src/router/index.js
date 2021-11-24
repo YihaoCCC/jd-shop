@@ -18,7 +18,11 @@ const router = new Router({
                 {
                     path: '/detail/:id',
                     component: () => import('@/pages/detail')
-                }    
+                },
+                {
+                    path: 'search',
+                    component: () => import('@/pages/search')
+                }
             ]
         },
         {
@@ -51,7 +55,6 @@ const router = new Router({
                 }   
             ]
         }
-
     ]
 })
 router.afterEach(() => {

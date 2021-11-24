@@ -1,15 +1,15 @@
 <template>
 <div>
     <div class="floatImgBox">
-        <div class="item" v-for="item in recommendList " :key="item.id" >
+        <div class="item" v-for="item in GoodsList " :key="item.id" >
             
-            <img :src="item.imgUrl" :alt="item.title" @click="GoToDetail(item)">
+            <img :src="item.photoUrl" :alt="item.goodsName" @click="GoToDetail(item)">
             
             <div class="nameInfo" @click="GoToDetail(item)">
-                <span class="self" v-if="item.isSelf === 1">自营</span> 
-                <span>{{item.title}}</span>
+                <span class="self" v-if="item.goodsIsSelf === 1">自营</span> 
+                <span>{{item.goodsName}}</span>
             </div>
-            <div class="pirce"><span>{{item.pirce | pirce}}</span></div>
+            <div class="pirce"><span>{{item.goodsPrice | pirce}}</span></div>
             <div class="more">
                 <div class="findMore" @click="AddToCart(item)">
                     <span>加入购物车</span>
@@ -114,7 +114,8 @@ export default {
                     imgUrl: 'https://img20.360buyimg.com/jdcms/s300x300_jfs/t1/205589/26/14187/204557/6185fc40Ec5a9c82c/12bf7822356bae59.jpg.webp'
                 },
 
-            ],
+            ],//mock数据
+            GoodsList: [],//后端数据
             isShow: false,
         }
     },
@@ -128,8 +129,8 @@ export default {
     },
     methods: {
         GoToDetail(item) {
-            this.yhRequest.get(`/api/goods/goodsDetail/${item.id}`).then(() => {
-                this.$router.push(`/detail/${item.id}`)
+            this.yhRequest.get(`/api/goods/goodsDetail/${item.goodsId}`).then(() => {
+                this.$router.push(`/detail/${item.goodsId}`)
             })
         },
         getGoods() {
@@ -138,6 +139,7 @@ export default {
                     this.$message.warning('数据已经到底了哦')
                     this.showMore = false
                 }
+                this.GoodsList = res
                 console.log(res)
             })
         },

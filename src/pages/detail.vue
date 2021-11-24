@@ -1,6 +1,6 @@
 <template>
     <div>
-        <detail-header :title="detail.title">
+        <detail-header :title="detail.goodsName">
             <template v-slot:buy>
                 <button @click="addCart">加入购物车</button>
             </template>
@@ -8,57 +8,59 @@
         <div class="detailContent">
             <div class="safeContent content">
                 <div class="leftContent">
-                    <img :src="detail.imgUrl" alt="">
+                    <img :src="detail.photoUrl" alt="">
                 </div>
                 <div class="rightContent">
                     <div class="detail">
                         <div class="detailTitle">
-                            <h2>{{detail.title}}</h2><br>
-                            <p style="line-height:18px">相机全新升级 / 120HZ屏幕刷新率 / 手持超级夜景 / 骁龙888Plus处理器 / 红外人脸解锁 / AI变焦双摄 / 三星 AMOLED 屏</p>
-                            <h4>京东自营（达达利亚小组）</h4>
+                            <h2>{{detail.goodsName}}</h2><br>
+                            <p style="line-height:18px;">{{detail.goodsDetail}}</p>
+                            <svg t="1637745152505" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2332" width="30" height="30"><path d="M627.94 474.05c-54.819 0-99.511-50.64-99.511-112.693v-37.618h199.022v37.618c0 62.214-44.692 112.693-99.511 112.693zM64.343 361.356v-37.618h199.022v37.618c0 62.054-44.692 112.693-99.511 112.693s-99.511-50.478-99.511-112.693zM495.408 73.336v225.387H305.71l49.836-225.387z" fill="#F3797D" p-id="2333"></path><path d="M668.291 73.336l49.836 225.387H528.429V73.336zM296.386 323.899h199.022v37.457c0 62.054-44.692 112.693-99.511 112.693s-99.511-50.64-99.511-112.693v-37.457zM760.311 323.899h199.022v37.457c0 62.054-44.692 112.693-99.511 112.693-54.82 0-99.511-50.64-99.511-112.693v-37.457z" fill="#3A5CAC" p-id="2334"></path><path d="M938.917 298.723h-185.84L703.241 73.336h136.004z" fill="#F3797D" p-id="2335"></path><path d="M184.27 73.336h136.165l-49.836 225.387H84.759zM97.203 495.368c10.771 2.411 21.864 3.697 33.117 3.697 54.176 0 101.194-13.737 132.628-75.236 30.223 45.656 78.451 75.236 132.628 75.236s102.405-29.58 132.628-75.236c22.934 50.221 59.088 67.269 99.511 71.378v454.471H97.203v-454.31z" fill="#3A5CAC" p-id="2336"></path><path d="M909.786 950H644.37V495.368c40.512-9.324 75.558-35.367 99.511-71.378 30.223 45.656 78.451 75.236 132.628 75.236 11.414 0 22.346-1.286 33.117-3.697V950h0.16z" fill="#F3797D" p-id="2337"></path><path d="M793.685 686.995c0 20.738-14.79 37.618-33.117 37.618-18.327 0-33.117-16.88-33.117-37.618 0-20.738 14.79-37.618 33.117-37.618 18.326 0 33.117 16.88 33.117 37.618z" fill="#FFFFFF" p-id="2338"></path></svg>
+                            <h4 style="display:inline-block;margin-left: 20px">京东自营（达达利亚小组）</h4>
                             <div style="margin-top:14px">
-                            <span>{{detail.price}}元 </span><em style="text-decoration: line-through;margin-left:10px">2999元</em>
+                            <span>{{detail.goodsPrice | price}}元 </span><em style="text-decoration: line-through;margin-left:10px">2999元</em>
                         </div>
                         </div>
                         <div class="adress">
                             <div style="display:flex">
                                 <svg t="1636198963321" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4100" width="16" height="16"><path d="M512 1012.8c-253.6 0-511.2-54.4-511.2-158.4 0-92.8 198.4-131.2 283.2-143.2h3.2c12 0 22.4 8.8 24 20.8 0.8 6.4-0.8 12.8-4.8 17.6-4 4.8-9.6 8.8-16 9.6-176.8 25.6-242.4 72-242.4 96 0 44.8 180.8 110.4 463.2 110.4s463.2-65.6 463.2-110.4c0-24-66.4-70.4-244.8-96-6.4-0.8-12-4-16-9.6-4-4.8-5.6-11.2-4.8-17.6 1.6-12 12-20.8 24-20.8h3.2c85.6 12 285.6 50.4 285.6 143.2 0.8 103.2-256 158.4-509.6 158.4z m-16.8-169.6c-12-11.2-288.8-272.8-288.8-529.6 0-168 136.8-304.8 304.8-304.8S816 145.6 816 313.6c0 249.6-276.8 517.6-288.8 528.8l-16 16-16-15.2zM512 56.8c-141.6 0-256.8 115.2-256.8 256.8 0 200.8 196 416 256.8 477.6 61.6-63.2 257.6-282.4 257.6-477.6C768.8 172.8 653.6 56.8 512 56.8z m0 392.8c-80 0-144.8-64.8-144.8-144.8S432 160 512 160c80 0 144.8 64.8 144.8 144.8 0 80-64.8 144.8-144.8 144.8zM512 208c-53.6 0-96.8 43.2-96.8 96.8S458.4 401.6 512 401.6c53.6 0 96.8-43.2 96.8-96.8S564.8 208 512 208z" fill="#eb685f" p-id="4101"></path></svg>
                                 
-                                <input type="text" disabled value="北京 北京市 朝阳区 安定门街道" style="margin-left:20px">    
+                                <input type="text" disabled value="天津 天津市 西青区 天津市大学软件学院" style="margin-left:20px">    
                                 <span style="margin-left:20px;line-height: 22px">修改</span>
                             </div>
                             <span style="margin-left:40px;margin-top:10px;display:block">
                                 有现货
                             </span>
+                            <span style="margin-left:40px;margin-top:10px;display:block;font-size:12px;color:#999">库存   <em style="color: #E1251B">{{detail.goodsInvn}} </em>件</span>
                         </div>
                         <h2 style="margin:20px 0 0 0">选择版本</h2>
                         <div class="version">
-                            <div class="version-box" v-for="(item,index) in versionInfo" :key=index @click="choose(item,index)" :class="{'version-shadow':version==index}" >
-                                <span>{{item.version}} {{item.dataV}}</span> {{item.price}}元
+                            <div class="version-box" v-for="(item,index) in versionDetail" :key=index @click="choose(item,index)" :class="{'version-shadow':version==index}" >
+                                <span>{{item.goodsVersionDetail}}</span> 
                             </div>
                         
                         </div>
-                        <h2 style="margin:20px 0 20px 0">选择颜色</h2>
+                        <h2 style="margin:20px 0 20px 0">配送方式</h2>
                         <div class="color">
                             <div class="color-box"></div>
-                            深空灰
+                            平台默认配送
                         </div> 
                         
                         <div class="total" >
                             <span style="">{{detail.name}}</span>
                             <div v-if="this.total.length===0">请选择商品属性</div>
                             <div v-else class="total-version-money">
-                            <div class="choose-version-color" v-for="(item,index) in versionInfo" :key=index :style="version!==index?'display:none':''" >
-                                {{version === index ? item.version+item.dataV +" 深空灰":''}}
+                            <div class="choose-version-color" v-for="(item,index) in versionDetail" :key=index :style="version!==index?'display:none':''" >
+                                {{version === index ? item.goodsVersionDetail:''}}
                             </div>
-                            <p>总计: {{this.total.price}} 元</p>
+                            <p>总计: {{this.total.goodsPrice}} 元</p>
                             </div>
                         </div>
 
                         <div class="detail-btn">                      
                             <button  @click="GoOrderConfrim"> 立即购买</button>
                             <div class="btn-like">
-                                喜欢
+                                加入收藏夹
                             </div>
                         </div>
                     </div>
@@ -82,6 +84,13 @@ export default {
         this.getGoodsDetail()
         console.log(this.$route.params.id)
     },
+    filters: {
+        price(price) {
+            // return `￥${p.toFixed(2)}`
+                price =  Number(price)
+             return `￥${price.toFixed(2)}`
+        }
+    },
     components: {
         DetailHeader,
         Comment
@@ -104,12 +113,17 @@ export default {
                     version:'12G+256GB',
                     dataV:'全网通',
                     price:2099,
-                }],   
+                }],
+            versionDetail: []   
         }
     },
     methods: {
         getGoodsDetail() {
-            this.yhrequest.get('/api/goods/goodsDetail')
+            this.yhRequest.get(`/api/goods/goodsDetail/${this.$route.params.id}`).then((res) => {
+                this.detail = res
+                this.versionDetail = res.goodsVersions
+                console.log(res)
+            })
         },
         addCart(){
                 // this.axios.post('/carts',{
@@ -202,7 +216,7 @@ button {
                         height: 22px;
                     }
                     input{
-                        width: 200px;
+                        width: 240px;
                         border: none;
                         color: #999;
                     }
@@ -214,19 +228,23 @@ button {
                 .version{
                     display: flex;
                     justify-content: space-between;
-                    flex-wrap:wrap;
-                    
+                    flex-wrap:wrap;       
                     .version-box{
                         margin-top: 20px;
                         cursor: pointer;
-                        width: 268px;
-                        font-size: 16px;
-                        height: 50px;
+                        width: 268px;                    
                         line-height: 50px;
-                        text-align: center;
                         border: 1px solid #e5e5e5;
+                        padding: 0 5px;
+                        box-sizing: border-box;
                         translate:  all 0.6s;
                         span{
+                            font-size: 14px;
+                            display: block;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            width: 100%;
                             color:$colorA;
                         }
                     }
@@ -259,6 +277,9 @@ button {
                     border: 1px solid #E5E5E5;
                     box-sizing: border-box;
                     padding: 20px 20px 20px 20px;
+                    .choose-version-color {
+                        width: 390px;
+                    }
                     .total-version-money{
                         display: flex;
                         justify-content: space-between;

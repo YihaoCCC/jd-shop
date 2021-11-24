@@ -21,8 +21,6 @@
             <recommand></recommand>
             <!-- 服务条款 -->
         </div>
-        <service-bar/>
-        
     </div>
 </template>
 <script>
@@ -30,14 +28,14 @@ import SwiperBanner from './c-pages/SwiperBanner'
 import SecondBuy from './c-pages/SecondBuy' 
 import Recommand from './c-pages/Recommand'
 import Sale from './c-pages/Sale'
-import ServiceBar from '../../components/ServiceBar'
+
 export default {
     components: {
         SwiperBanner,
         SecondBuy,
         Recommand,
-        Sale,
-        ServiceBar
+        Sale
+        
     },
     data() {
         return {

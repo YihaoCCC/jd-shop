@@ -4,7 +4,7 @@
       <h1>达 达 利 亚</h1>
       <div class="time">
         <h3>{{ time | timeF}}  </h3>
-        点场 距结束
+        点场 距开始
         <div class="timeContent">
           <div class="timmer">
             00
@@ -74,10 +74,12 @@ export default {
       setInterval(() => {
       let Time = new Date()//每次获取当前时间
       let time = endTime - Time //计算差值
-      this.munite = Math.floor(time/(60000)%60)    //计算分钟数
-       
-      this.second = Math.floor(time/1000%60);  //计算秒数
-      
+      if(time> 0) { //小于0刷新页面
+        this.munite = Math.floor(time/(60000)%60)    //计算分钟数
+        this.second = Math.floor(time/1000%60);  //计算秒数
+      } else {
+        history.go(0)
+      }
       },1000)
       
     },

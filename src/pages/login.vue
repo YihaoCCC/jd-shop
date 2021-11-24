@@ -163,6 +163,7 @@ export default {
             if(res) {
               this.$cookie.set('userId',res.userId,{expires:'Session'})
               this.$store.dispatch('saveUser', res)
+              this.$message.success(`欢迎您,${res.userName}！`)
               this.$router.push('/')
             } else {
               this.$message.error('登录失败，请检查账号密码')

@@ -14,7 +14,7 @@
             </div>
             <div class="right">
                 <span @click="toLogin" v-if="!userName">你好，请登录</span>
-                <span  v-else >{{userName}}</span>
+                <span  v-else class="username">{{userName}}</span>
                 <span @click="noneEvent">手机访问</span>
                 <span @click="noneEvent">网站导航</span>
                 <span @click="noneEvent">客户服务</span>
@@ -107,6 +107,10 @@ export default {
             .right {
                 display: flex;
                 align-items: center;
+                .username {
+                    font-weight: bolder;
+                    
+                }
                 span{
                     margin: 0 10px;
                     &::after {
