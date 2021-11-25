@@ -37,7 +37,7 @@
         </div>
         <div class="userInfoBottom">
             <div class="newPerson">
-                <a href="">个人中心</a>
+                <a href="javascript:;" @click="GoProfile">个人中心</a>
             </div>
             <div class="PlusVip">
                 <a href="">哒哒会员</a>
@@ -113,14 +113,27 @@
         </div>
     </div>
    </div>
-  
+    <model
+      title="来自哒哒利亚的提示"
+      content="当前未登录，是否跳转至登录界面？"
+      SureText="确认"
+      CancelText="稍后登录"
+      @SureClick='GoLogin'
+      @CancelClick='cancel'
+      :IsShow="isShow"
+    >
+
+    </model>
   </div>
 </template>
 <script>
 import NavMenu from '@/components/NavMenu';
+import Model from '../../../components/Model.vue';
+// import {MessageBox} from 'element-ui';
 export default {
     components: {
-        NavMenu
+        NavMenu,
+        Model
     },
     computed: {
       userName: {
@@ -131,6 +144,7 @@ export default {
     },
   data() {
     return {
+      isShow: false,
       swiperImg: [
         {
           id: 1,
@@ -236,6 +250,30 @@ export default {
   methods: {
     GoLogin() {
       this.$router.push('/login')
+    },
+    cancel() {
+      this.isShow = false
+    },
+    GoProfile(e) {
+      if(this.userName) {
+        this.$router.push('/profile')
+      } else {
+        // MessageBox.alert('115615')
+        // this.$msgbox.confirm('请先登录，是否跳转到登录页面','来自哒哒利亚的提示', {
+        //    confirmButtonText: '确定',
+        //   cancelButtonText: '取消',
+        //   type: 'warning'
+        // }).then(() => {
+        //   this.$router.push('/login')
+        // }).catch(() => {
+        //   this.$message({
+        //     type: 'info',
+        //     message: '已取消登录'
+        //   });          
+        // })
+        this.isShow = true
+      }
+      e.preventDefault()
     }
   }
 };

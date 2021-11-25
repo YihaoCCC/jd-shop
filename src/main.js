@@ -4,7 +4,7 @@ import cookie from 'vue-cookie'
 
 import App from './App.vue'
 import router from './router'
-import { Carousel,CarouselItem, Backtop, Icon, Message, Rate, Radio, RadioGroup } from "element-ui";
+import { Carousel,CarouselItem, Backtop, Icon, Message, Rate, Radio, RadioGroup, Form, Input, FormItem } from "element-ui";
 import 'element-ui/lib/theme-chalk/index.css';
 import yhRequest from './service';
 import store from './store'
@@ -22,8 +22,12 @@ Vue.use(Icon)
 Vue.use(Rate)
 Vue.use(Radio)
 Vue.use(RadioGroup)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Input)
 Vue.use(cookie)
 Vue.prototype.$message = Message
+// Vue.prototype.$msgbox = MessageBox;
 // Vue.component(Message.name,Message);
 
 new Vue({
