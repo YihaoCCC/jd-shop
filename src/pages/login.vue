@@ -65,7 +65,7 @@
       </svg>
       <span
         >依据《网络安全法》，为保障您的账户安全和正常使用，请尽快完成手机号验证！
-        新版《京东隐私政策》已上线，将更有利于保护您的个人隐私。</span
+        新版《哒哒利亚隐私政策》已上线，将更有利于保护您的个人隐私。</span
       >
     </div>
     <div class="login-content">
@@ -98,7 +98,7 @@
                         p-id="3524"
                         ></path>
                     </svg>
-                    <span>京东不会以任何理由要求您转账汇款，谨防诈骗。</span>
+                    <span>哒哒利亚不会要求您转账汇款，谨防诈骗。</span>
             </div>
              <div class="login-type">
                     <span>扫码登陆</span>
@@ -120,7 +120,7 @@
                     </div>
                     <p style="text-align: right ;margin-top:13px"><span>忘记密码</span></p>
                     <div class="input">
-                        <button @click="login">登    陆</button>
+                        <button @click="login" @keyup.enter='login'>登    陆</button>
                     </div>
             </div>
             <div class="login-footer">
@@ -142,7 +142,7 @@
         </div>
     </div>
     <div class="footer">
-        <p>关于我们 | 联系我们 | 人才招聘 | 商家入驻 | 广告服务 | 手机京东 | 友情链接 | 销售联盟 | 京东社区 | 京东公益 | English Site</p>
+        <p>关于我们 | 联系我们 | 人才招聘 | 商家入驻 | 广告服务 | 友情链接 | 销售联盟 | 哒哒利亚社区 | 哒哒利亚公益 | English Site</p>
         <p>Copyright © 2021-2021  达达利亚小组 版权所有</p>
     </div>
   </div>
@@ -156,6 +156,17 @@ export default {
       password: '',
       textColor: '10px'
     }
+  },
+  created() {
+    let that = this
+    document.onkeydown = function (e) {
+      e = window.event || e
+      //保证是在登录页面发出的enter事件
+      if ((that.$route.path === '/login'||that.$route.path === '/') && (e.code === 'Enter' || e.code === 'enter')) {
+        //调用登录函数
+        that.login();
+      }
+      }
   },
   methods: {
       login() {

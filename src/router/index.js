@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import Home from '@/pages/home'
 import Index from '@/pages/index/index'
+
+// import store from '../store/index'
 // 解决导航栏或者底部导航tabBar中的vue-router在3.0版本以上频繁点击菜单报错的问题。
 const originalPush = Router.prototype.push
 Router.prototype.push = function push (location) {
@@ -80,4 +82,22 @@ const router = new Router({
 router.afterEach(() => {
     window.scrollTo(0,0)
 })
+// router.beforeEach((to, from, next) => {
+//     console.log(to)
+//     if(to.path === '/myCart'|| to.path==='/profile' || to.path==='/order/list') {
+//         console.log('进入了判断')
+//         console.log( store.state.user)
+
+//         if( store.state.user.userId ) {
+//             console.log( store.state.user)
+//             console.log('已经登录')
+//             next()
+//         } else {
+//             console.log('未登录，去登录页面')
+//             next('/login')
+//         }
+//     } else {
+//         next()
+//     }
+//   })
 export default router

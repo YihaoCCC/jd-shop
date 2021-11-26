@@ -4,7 +4,7 @@
         <div class="swiperSecond">
             <div class="safeContent">
                 <!-- 轮播图 -->
-                <swiper-banner></swiper-banner>
+                <swiper-banner ref="swiper"></swiper-banner>
                 <!-- 秒杀部分 -->
                 <second-buy></second-buy>
             </div> 
@@ -41,7 +41,7 @@ export default {
         return {
             
         }
-    },
+    }
 }
 </script>
 <style scoped lang='scss'>

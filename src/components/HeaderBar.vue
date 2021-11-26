@@ -14,27 +14,58 @@
             </div>
             <div class="right">
                 <span @click="toLogin" v-if="!userName">你好，请登录</span>
-                <span  v-else class="username">{{userName}}</span>
+                <span  v-else class="username" >{{userName}} 
+                    <div class="children">
+                        <p @click="GoToProfile" > <svg t="1637891019599" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4047" width="20" height="20"><path d="M639.3 483.2c55.9-39.4 89.3-103.5 89.6-171.9-2.8-120.2-102.5-215.6-222.8-212.9-116.5 2.6-210.3 96.4-212.9 212.9 0.3 68.4 33.6 132.5 89.6 171.9-137.9 50.4-230 181.1-231.1 327.8 0.9 65.4 54.6 117.8 120 116.9h478.8c65.4 0.8 119.1-51.5 120-116.9-1.3-146.7-93.4-277.4-231.2-327.8zM358.4 311.4c-2.1-84.3 64.5-154.3 148.8-156.4 84.3-2.1 154.3 64.5 156.4 148.8S599.1 458 514.8 460.1H511c-83.1 1-151.4-65.6-152.6-148.7z m392 552.8H271.6c-29.7 0.5-54.2-23.2-54.7-53v-0.2c4.4-162.4 139.7-290.5 302.2-286.1 156.2 4.3 281.8 129.9 286.1 286.1-0.4 29.7-24.8 53.5-54.5 53.1-0.2 0.1-0.2 0.1-0.3 0.1z" p-id="4048"></path></svg>个人中心</p>
+                        <p @click="LogOut"> <svg t="1637890961994" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3177" width="20" height="20"><path d="M662.016 247.6544a32 32 0 1 1 29.4912-56.832 390.4 390.4 0 1 1-359.0144 0 32 32 0 1 1 29.4912 56.832 326.4 326.4 0 1 0 300.032 0zM544 384a32 32 0 1 1-64 0v-256a32 32 0 1 1 64 0v256z" p-id="3178"></path></svg>退出登录</p>
+                    </div>
+                </span>
                 <span @click="noneEvent">手机访问</span>
                 <span @click="noneEvent">网站导航</span>
                 <span @click="noneEvent">客户服务</span>
                 <span @click="noneEvent">企业采购</span>
                 <span @click="noneEvent">哒哒会员</span>
-                <span @click="noneEvent">我的收藏</span>
+                <span @click="GoColloect">我的收藏</span>
                 <span @click="GoToOrder">我的订单</span>
                 <span @click="gotoCart">购物车</span>
                 
             </div>
         </div>
+        <model
+            title="来自哒哒利亚的提示"
+            content='是否确认退出登录'
+            :btnType="3"
+            @SureClick='out'
+            @CancelClick='cancel'
+            :IsShow="showLogOut"
+        ></model>
+        <model
+            title="来自哒哒利亚的提示"
+            content="当前未登录，是否跳转至登录界面？"
+            SureText="确认"
+            CancelText="稍后登录"
+            @SureClick='toLogin'
+            @CancelClick='cancel'
+            :IsShow="isShow"
+            >
+
+    </model>
     </div>
 </template>
 <script>
+import Model from './Model.vue'
 
 export default {
+    components: {
+        Model 
+    },
     data() {
+      
         return {
             message: '我是headerBar',
-            showBack: false
+            showBack: false,
+            showLogOut: false,// 退出登录弹框
+            isShow: false, // 是否去登录界面弹框
         }
     },
     computed: {
@@ -63,7 +94,11 @@ export default {
     },
     methods: {
         gotoCart() {
-            this.$router.push('/myCart')
+            if(this.userName) {
+                this.$router.push('/myCart')
+            } else {
+                this.isShow = true
+            }
         },
         backIndex() {
             this.$router.push('/')
@@ -72,7 +107,40 @@ export default {
             this.$router.push('/login')
         },
         GoToOrder() {
-            this.$router.push('/order/list')
+            if(this.userName) {
+                this.$router.push('/order/list')
+            } else {
+                this.isShow = true
+            }
+        },
+        GoColloect() {
+            if(this.userName) {
+                this.$router.push('/collect')
+            } else {
+                this.isShow = true
+            }
+        },
+        GoToProfile() {
+            if(this.userName) {
+                this.$router.push('/profile')
+            } else {
+                this.isShow = true
+            }
+        },
+        LogOut() {
+            this.showLogOut = true
+        },
+        out() {
+            this.$cookie.set('userId','',{expires:'-1'});
+            this.showLogOut = false
+            this.$router.push('/').then(() => {
+                history.go(0)
+            })
+            this.$message.warning('你已成功退出登录')
+        },
+        cancel() {
+            this.showLogOut = false
+            this.isShow =false
         },
         noneEvent() {
             this.$message.warning('该功能暂未开放')
@@ -109,8 +177,51 @@ export default {
                 align-items: center;
                 .username {
                     font-weight: bolder;
-                    
+                    position: relative;
+                    &:hover {
+                        color: $colorA;
+                        .children {
+                            height: 78px;
+                        }
+                    }
+                    .children {
+                        position: absolute;
+                        transition: all 0.5s;
+                        overflow: hidden;
+                        top: 30px;
+                        left: -40px;
+                        width: 120px;
+                        height: 0px;
+                        padding: 0px 21px;
+                        box-sizing: border-box;
+                        background-color: #e5e5E1;
+                        border-bottom-left-radius: 20px;
+                        border-bottom-right-radius: 20px;
+                        p {
+                            border-bottom: 1px solid #999;
+                            color: #666;
+                            display: flex;
+                            svg {
+                                path {
+                                    fill: #666;
+                                }
+                            }
+                            align-items: center;
+                            &:hover {
+                                color: $colorA;
+                                svg {
+                                    path {
+                                        fill: $colorA
+                                    }
+                                }
+                            }
+                            &:last-child {
+                                border:none
+                            }
+                        }
+                    }
                 }
+
                 span{
                     margin: 0 10px;
                     &::after {

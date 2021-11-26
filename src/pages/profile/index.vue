@@ -5,7 +5,7 @@
             <template v-slot:description>
                 <div style="text-align: right">
                      
-                    <button class="cartButton">
+                    <button class="cartButton" @click="GoToCart">
                         
                         <svg style="margin-right: 3px" t="1634905227727" class="icon" viewBox="0 0 1028 1024" version="1.1" 
                         xmlns="http://www.w3.org/2000/svg" p-id="7068" width="16" height="16"><path d="M332.8 790.528q19.456 0 36.864 7.168t30.208 19.968 20.48 30.208 7.68 36.864-7.68 36.864-20.48 30.208-30.208 20.48-36.864 7.68q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-36.864 
@@ -73,6 +73,9 @@ import ServiceBar from '../../components/ServiceBar.vue'
             GoCollect() {
                 this.nowPage = 2
                 this.$router.push('collect')
+            },
+            GoToCart() {
+                this.$router.push('/myCart')
             }
         }
     }

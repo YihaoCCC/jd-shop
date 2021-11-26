@@ -11,7 +11,7 @@
             <div class="cart-body">
                 <ul class="cart-body-header">
                     <div class="checkbox " :class="{'checked':allCheck}" @click="selectAll"></div>
-                    <li class="col-1"  >全选</li>
+                    <li class="col-1">全选</li>
                     <li class="col-3">商品名称</li>
                     <li class="col-1">单价</li>
                     <li class="col-2">数量</li>
@@ -21,19 +21,25 @@
                 <ul class="cart-body-list" v-for="(item,index) in List " :key="index">
                     <div class="checkbox" :class="{'checked':item.productSelected }" @click="changeSelectedItem(item)"></div>
                     <li class="item-img">
-                        <img v-lazy="item.productMainImage"  alt="">
+                        <img :src="item.versionPhotoUrl"  alt="">
                     </li>
-                    <li class="item-name">{{item.productName}}  {{item.productSubtitle}}</li>
-                    <li class="item-price">{{item.productPrice}}元</li>
+                    <li class="item-name">
+                        <div class="name">
+                            <p>{{item.goodsName}}</p>
+                            <p>{{item.goodsVersionDetail}}</p>
+                        </div>
+                        
+                    </li>
+                    <li class="item-price">{{item.price}}元</li>
                     <div class="item-num">
                         <div class="num-box">
-                            <span @click="deleteNum(item)" style="cursor: pointer" >-</span>
-                            {{item.quantity}}
-                            <span @click="addNum(item)" style="cursor: pointer">+</span>
+                            <span @click="updataGoodsNum(item,1)" style="cursor: pointer" >-</span>
+                            {{item.num}}
+                            <span @click="updataGoodsNum(item,2)" style="cursor: pointer">+</span>
                         </div>
                     </div>
-                    <li class="item-totalPrice" style="color: $colorA" >{{item.productTotalPrice}}元</li>
-                    <li class="item-deleteAll" @click="showmodal(item.productId)" >
+                    <li class="item-totalPrice" style="color: $colorA" >{{itemTotalPrice(item.num,item.price)}}元</li>
+                    <li class="item-deleteAll" @click="showmodal(item)" >
 
                     </li>
                 </ul>
@@ -53,35 +59,55 @@
 
             </div>
         </div>
+        <service-bar>   </service-bar>
+        <Footer></Footer>
+        <model
+            content='是否从您的购物车中删除此商品？'
+            SureText='确认删除'
+            CancelText="我再想想"
+            @SureClick='deleteOneList(item)'
+            @CancelClick='showModal=false'
+            :IsShow="showModal"
+        >
+
+        </model>
     </div>
 </template>
 <script>
+import Footer from '../components/Footer.vue'
 import HeaderBar from '../components/HeaderBar.vue'
 import Loading from '../components/Loading.vue'
+import Model from '../components/Model.vue'
 import OrderHeader from '../components/OrderHeader.vue'
+import ServiceBar from '../components/ServiceBar.vue'
 export default {
-  components: { HeaderBar, OrderHeader, Loading },
-    name: 'Cart',
+  components: { HeaderBar, OrderHeader, Loading, ServiceBar,Footer, Model },
+    
     data() {
         return {
             message: '我是购物车界面',
-            List: [],
+            List: [],           // 购物车数据
             allCheck: false,
             cartTotalPrice:0,
             checkNum:0,
-            showModal:false,
-            id:0,
-            loading: true 
+            showModal:false,    // 控制弹框
+            item:{},            // 弹框时候的ID中转站
+            loading: true       // 页面加载的loading组件
         }
     },
     mounted() {
-        setTimeout(() => {
-            this.loading = false
-        }, 2000);
+        this.getCartList()
+    },
+    computed: {
+        itemTotalPrice() {
+            return function(num,price) {
+                return num*price
+            }
+        }
     },
     methods: {
-        showmodal(id){
-              this.id=id ;
+        showmodal(item){
+              this.item=item ;
               this.showModal=true;
             },
             goShopping(){
@@ -89,8 +115,9 @@ export default {
             },
 
             getCartList() {
-                this.axios.get("/carts").then((res)=>{
+                this.yhRequest.get(`/api/shoppingCart/queryByUserId/${this.$store.state.user.userId}`).then((res)=>{
                    this.randerData(res)
+                   this.loading = false
                 })
             },
             //全部选中
@@ -102,10 +129,11 @@ export default {
             },
             //重新渲染数据函数
             randerData(res){
-                this.List = res.cartProductVoList;
-                this.allCheck = res.selectedAll;
-                this.cartTotalPrice = res.cartTotalPrice;
-                this.checkNum=this.List.filter((i)=> i.productSelected).length;
+                this.List = res;
+
+                // this.allCheck = res.selectedAll;
+                // this.cartTotalPrice = res.cartTotalPrice;
+                // this.checkNum=this.List.filter((i)=> i.productSelected).length;
             },
             changeSelectedItem(item){
                 let selected = !item.productSelected;
@@ -114,49 +142,44 @@ export default {
                     selected,
                 }).then((res)=> this.randerData(res))
             },
-            //减少商品
-            deleteNum(item){
-                let quantity = item.quantity;
-                if(quantity === 1){
-                    this.$message.warning("商品数量不能小于1");
+            //修改商品加购数量
+            updataGoodsNum(item,type){
+                if( type === 1 ) {
+                    if( item.num === 1 ) {
+                        this.$message.warning("商品数量不能小于1"); 
+                    } else {
+                        item.num--
+                    }
+                } else {
+                    item.num++
                 }
-                else {
-                    --quantity;
-                    this.axios.put(`/carts/${item.productId}`,{
-                        quantity,
-                    }).then((res)=>this.randerData(res))
-                }
-            },
-            //增加商品
-            addNum(item){
-                let quantity = item.quantity;
-                ++quantity;
-                if( item.productStock < quantity){
-                    this.$message.warning("商品数量超过库存上限");
-                }
-                else {
-                    this.axios.put(`/carts/${item.productId}`,{
-                        quantity,
-                    }).then((res)=>this.randerData(res))
-                }
+                this.yhRequest.post('/api/shoppingCart/modify',{
+                        userId: this.$store.state.user.userId,
+                        goodsId: item.goodsId,
+                        goodsVersionId: item.goodsVersionId,
+                        goodsPrice: item.price,
+                        goodsNumber: item.num
+                    }).then((res) => {
+                        this.randerData(res)
+                })
             },
             //删除此列所有商品
-            deleteAll(id){
-                this.axios.delete('/carts/'+id,{
-                    productId:id
+            deleteOneList(item){
+                this.yhRequest.delete('/api/shoppingCart/delete', {  
+                    userId: this.$store.state.user.userId,
+                    goodsId: item.goodsId,
+                    goodsVersionId: item.goodsVersionId
                 }).then((res)=>{
-                    this.List=res.cartProductVoList
-                    this.cartTotalPrice = res.cartTotalPrice;
+                     this.randerData(res)
                 }).then(()=>{this.showModal=false;
                }).then(()=>
                     this.$message.success("商品删除成功！"))
-            },
-            //跳转到订单界面
+            }, 
+            //跳转到订单界面 去支付
             goOrder(){
                 let judgeStatus = this.List.every(item=>item.productSelected===false);//(和  （item=>!item.productSelected）作用相等)
                 if(judgeStatus){
                   this.$message.warning("请至少选择一件商品！")
-
                 }
                 else {
                     this.$router.push('/order/confirm')
@@ -225,6 +248,7 @@ export default {
                 border-bottom: 1px solid #e5e5e5;
 
                 .checkbox{
+                    cursor: pointer;
                     width: 22px;
                     height: 22px;
                     margin:0 20px;
@@ -239,16 +263,40 @@ export default {
                     }
                 }
                 .item-img{
-                    margin-left: 70px;
-                    width: 80px;
-                    height: 60px;
+                    width: 150px;
+                    height: 80px;
+                   
                     img{
-                        width: 100%;
+                        display: block;
+                        margin: auto;
+                        width: 80px;
                         height: 100%;
                     }
                 }
                 .item-name{
                     flex: 3;
+                    font-size: 14px;
+                    .name {
+                        box-sizing: border-box;
+                        padding: 0 20px;
+                        width: 90%;
+                        margin: auto;
+                        p   {
+                            color: #555;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: wrap;
+                            word-break: break-all;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                            &:last-child {
+                                margin-top: 10px;
+                                color: #666;
+                                font-size: 12px;
+                            }
+                        }
+                    }    
                 }
                 .item-price{
                     flex: 1;

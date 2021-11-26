@@ -28,10 +28,10 @@
         <div class="userInfoTop">
             <img src="../../../assets/imgs/avatar.png" alt="">
             <div class="info">
-                Hi ~欢迎逛京东！
+                Hi ~欢迎逛商城！
                 <div class="nologin" >
                     <p v-if="!userName" @click="GoLogin">登陆 | 注册</p>
-                    <p v-else>{{userName}}</p>
+                    <p v-else style="font-weight: bolder;color:#E1251B">{{userName}}</p>
                 </div>
             </div>
         </div>
@@ -114,7 +114,6 @@
     </div>
    </div>
     <model
-      title="来自哒哒利亚的提示"
       content="当前未登录，是否跳转至登录界面？"
       SureText="确认"
       CancelText="稍后登录"

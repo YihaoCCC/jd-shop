@@ -31,7 +31,7 @@
         props: {
             title: {
                 type: String,
-                default: '提示'
+                default: '来自哒哒利亚的提示'
             },
             btnType:{
                 type: Number,

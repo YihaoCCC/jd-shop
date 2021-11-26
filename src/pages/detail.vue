@@ -8,7 +8,8 @@
         <div class="detailContent">
             <div class="safeContent content">
                 <div class="leftContent">
-                    <img :src="detail.photoUrl" alt="">
+                    <img v-if="total.length ===0" :src="detail.photoUrl" alt="">
+                    <img v-else :src="total.versionPhotoUrl" alt="">
                 </div>
                 <div class="rightContent">
                     <div class="detail">
@@ -48,7 +49,7 @@
                         
                         <div class="total" >
                             <span style="">{{detail.name}}</span>
-                            <div v-if="this.total.length===0">请选择商品属性</div>
+                            <div v-if="total.length===0">请选择商品属性</div>
                             <div v-else class="total-version-money">
                             <div class="choose-version-color" v-for="(item,index) in versionDetail" :key=index :style="version!==index?'display:none':''" >
                                 {{version === index ? item.goodsVersionDetail:''}}
@@ -73,75 +74,107 @@
                 <comment v-for="item in 4" :key="item" ></comment>
             </div>
         </div>
+        <model
+            :IsShow="isShow"
+            :btnType="1"
+            content="添加购物车成功！"
+            SureText="查看购物车"
+            @CancelClick='cancel()'
+            @SureClick = 'sure()'
+        ></model>
     </div>
 </template>
 <script>
 import DetailHeader from '../components/DetailHeader.vue'
+import Model from '../components/Model.vue'
 import Comment from '@/components/Comment'
 export default {
+    components: {
+        DetailHeader,
+        Comment,
+        Model
+    },
     mounted() {
     //    this.detail = this.$route.query.detail
         this.getGoodsDetail()
         console.log(this.$route.params.id)
     },
+    computed: {
+        isChoose() {
+            return this.version <= this.detail.goodsVersions.length ? true : false
+        }
+    },
     filters: {
         price(price) {
-            // return `￥${p.toFixed(2)}`
                 price =  Number(price)
              return `￥${price.toFixed(2)}`
         }
     },
-    components: {
-        DetailHeader,
-        Comment
-    },
+    
+
     data() {  
         return {
             message: '产品详情',
             detail: {},
             version: 6,
             total: [],
-             versionInfo:[{
-                    version:'6G+128GB',
-                    dataV:'移动4G',
-                    price:1099,
-                },{
-                    version:'8G+128GB',
-                    dataV:'全网通',
-                    price:1299,
-                },{
-                    version:'12G+256GB',
-                    dataV:'全网通',
-                    price:2099,
-                }],
-            versionDetail: []   
+            versionDetail: [],
+            isShow: false   
         }
     },
     methods: {
         getGoodsDetail() {
             this.yhRequest.get(`/api/goods/goodsDetail/${this.$route.params.id}`).then((res) => {
+                // 给当前页面的详情数据赋值
                 this.detail = res
+                // 另外给版本详情赋值
                 this.versionDetail = res.goodsVersions
-                console.log(res)
+                // 当前的版本号一定比版本数量大 在加入或者购买前判断是否已经选择了商品的某个版本，未选中则不允许进行下一步操作
+                this.version = this.detail.goodsVersions.length + 1
             })
         },
         addCart(){
-                // this.axios.post('/carts',{
-                //     productId:this.$route.params.id,
-                //     selected: true
-                // }).then((res)=>{
-                //     this.$store.dispatch('saveCartCount',res.cartTotalQuantity);
-                //     this.$router.push('/cart');
-                // })
-                this.$router.push('/myCart');
+            if(this.isChoose) {
+                // 发送请求
+                this.yhRequest.post('/api/shoppingCart/addOnce',{
+                   
+                        userId: this.$store.state.user.userId,
+                        goodsId: this.total.goodsId,
+                        goodsVersionId: this.total.goodsVersionId, 
+                        goodsPrice: this.total.goodsPrice, //double
+                        goodsNumber: 1 //int
+                    
+                }).then((res) => {
+                    if(res) {
+                        this.isShow = true
+                    } else {
+                        return Promise(res)
+                    }
+                })
+            } else {
+                this.$message.error('请选择商品属性')
+            }
+                
         },
         choose(item,index){
-                console.log(this.total.length);
                 this.version=index;
-                this.total=item;     
+                this.total=item; 
+                console.log(this.total);
+                
+        },
+         cancel() {
+            this.isShow = false
+        },
+        sure() {
+            this.$router.push('/myCart')
         },
         GoOrderConfrim() {
-            this.$router.push('/order/confirm')
+            if(this.isChoose) {
+                this.$router.push('/order/confirm')
+            } else {
+                this.$message.error('请选择商品属性')
+            }
+           
         }
     }
 }
@@ -308,13 +341,18 @@ button {
                     }
                     .btn-like{
                         margin-left: 20px;
+                        cursor: pointer;
                         display: inline-block;
                         background-color: #BBBBBB;
                         text-align: center;
+                        border: 2px solid #e5e5e5;
                         height: 54px;
                         line-height: 54px;
                         width: 150px;
                         color: #ffffff;
+                        &:hover {
+                            border: 2px solid #fff;
+                        }
                     }
                 }
 
