@@ -5,13 +5,14 @@
             <div class="address-box">
                 <div class="addAddress" :class="{'checkedAddress': index === selectedAddress}" @click="selectedAddress=index" v-for="(item,index) in addressList" :key="index" >
                     <div class="name">
-                        {{item.receiverName}}
+                        {{item.name}}
+                        <div class="default" v-show="item.isDefault">默</div>
                     </div>
                     <div class="telephone">
-                        {{item.receiverMobile}}
+                        {{item.phone}}
                     </div>
                     <div class="address">
-                        {{item.receiverCity}} {{item.receiverDistrict}} {{item.receiverAddress}}
+                        {{item.province}} {{item.city}} {{item.area}} {{item.addressDetail}}
                     </div>
                     <div class="deleteEdit ">
                         <svg @click="openDelete(item)"  t="1627055165994" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="809" width="32" height="32"><path d="M92.748283 203.507071h838.503434v44.140606H92.748283zM644.402424 115.238788v44.127677h44.127677V115.238788c0-24.384646-19.75596-44.127677-43.998384-44.127677h-265.050505a43.97899 43.97899 0 0 0-31.172525 12.916364 43.918222 43.918222 0 0 0-12.825859 31.211313v44.127677h44.127677V115.238788h264.791919z m0 0" p-id="810" fill="#666666"></path>
@@ -92,19 +93,19 @@
             <template v-slot:body>
                 <div class="addAddressForm">
                     <div class="item">
-                        <input type="text" placeholder="姓名"  v-model="checkedItem.receiverName" >
-                        <input type="text" placeholder="手机号" v-model="checkedItem.receiverMobile" >
+                        <input type="text" placeholder="姓名"  v-model="checkedItem.name" >
+                        <input type="text" placeholder="手机号" v-model="checkedItem.phone" >
                     </div>
                     <div class="item">
-                        <select name="province" v-model="checkedItem.receiverProvince" >
+                        <select name="province" v-model="checkedItem.province" >
                             <option value="北京">北京</option>
-                            <option value="北京">天津</option>
+                            <option value="天津">天津</option>
                         </select>
-                        <select name="city" v-model="checkedItem.receiverCity" >
+                        <select name="city" v-model="checkedItem.city" >
                             <option value="北京市">北京市</option>
                             <option value="天津市">天津市</option>
                         </select>
-                        <select name="district" v-model="checkedItem.receiverDistrict" >
+                        <select name="district" v-model="checkedItem.area" >
                             <option value="昌平区">昌平区</option>
                             <option value="东城区">东城区</option>
                             <option value="海淀区">海淀区</option>
@@ -115,10 +116,12 @@
                         </select>
                     </div>
                     <div class="item">
-                        <textarea name="street" placeholder="请输入详细地址" v-model="checkedItem.receiverAddress" ></textarea>
+                        <textarea name="street" placeholder="请输入详细地址" v-model="checkedItem.addressDetail" ></textarea>
                     </div>
-                    <div class="item">
-                        <input type="text" placeholder="邮编" v-model="checkedItem.receiverZip">
+                    <div class="item-radio">
+                      是否设为默认收获地址：
+                        <el-radio v-model="checkedItem.isDefault" :label="1" >是</el-radio>
+                        <el-radio v-model="checkedItem.isDefault" :label="0" >否</el-radio>
                     </div>
                 </div>
             </template>
@@ -135,29 +138,38 @@
           Modal
         },
         name: "orderConfirm",
+        computed: {
+           hasDefault() {
+               return this.addressList.find((i) => {
+                    return i.isDefault === 1
+                })
+           }
+        },
         data(){
           return{
-              addressList:[],//收获地址列表
-              cartSelectedList:[],//购物车中需要结算的商品列表
-              totalPrice:0,//选中商品总价
-              num:0,//商品件数
-              userAction:'',//用户行为 0：表示添加新地址 1：表删修改地址 2：表示删除地址
-              checkedItem:{},//表示当前选中的地址项
-              showAdd:false,//展示添加收货地址模态框
-              showDelete:false,//展示删除收获地址模态框
-              selectedAddress:0,//表示当前选中的地址
+              addressList:[],      //收获地址列表
+              cartSelectedList:[], //购物车中需要结算的商品列表
+              totalPrice:0,        //选中商品总价
+              num:0,               //商品件数
+              userAction:'',       //用户行为 0：表示添加新地址 1：表删修改地址 2：表示删除地址
+              checkedItem:{
+                isDefault: 0       //保证每次新增的时候默认不选择为默认收获地址
+              },                   //表示当前选中的地址项
+              showAdd:false,       //展示添加收货地址模态框
+              showDelete:false,    //展示删除收获地址模态框
+              selectedAddress:0,   //表示当前选中的地址,
+              
           }
         },
         mounted(){
-            // this.getAdress();
+            this.getAdress();
             // this.getSelectedList();
         },
         methods:{
             openEdit(item){
-
-              this.checkedItem=item;
+                this.checkedItem=item;
                 this.showAdd=true;
-              this.userAction=1;
+                this.userAction=1;
             },
             openDelete(item){
               this.showDelete=true;
@@ -166,7 +178,9 @@
             },
             openAddAdresss(){
                 this.showAdd=true;
-                this.checkedItem={};
+                this.checkedItem={
+                     isDefault: 0 //保证每次新增的时候默认不选择为默认收获地址
+                };
                 this.userAction=0;
             },
             //地址增加、删除、修改方法
@@ -176,29 +190,29 @@
                 let params={};
                 if(userAction === 0 ){
                     method='post',
-                        url='/shippings'
+                    url='/api/address/add'
                 }
                 else if(userAction === 1){
                     method='put',
-                        url=`/shippings/${checkedItem.id}`
+                        url=`/api/address/modify`
                 }
                 else {
                     method='delete',
-                        url=`/shippings/${checkedItem.id}`
+                        url=`/api/address/delete/${checkedItem.addressId}`
                 }
                 if(userAction == 0 || userAction == 1){
-                    let { receiverName, receiverMobile, receiverProvince, receiverCity, receiverDistrict, receiverAddress, receiverZip } =checkedItem;
-                   let message='';
-                    if(!receiverName){
+                    let { name, phone, province, city, area, addressDetail, isDefault, addressId} =checkedItem;
+                    let message='';
+                    if(!name){
                        message='收货人姓名未填写！';
-                   } else if(!receiverMobile || testPhone.testPhone(receiverMobile) !=1 ){
-                        message = testPhone.testPhone(receiverMobile);
+                   } else if(!phone || testPhone.testPhone(phone) !=1 ){
+                        message = testPhone.testPhone(phone);
 
                     }
-                    else if(!receiverProvince || !receiverCity || !receiverDistrict ){
+                    else if(!province || !city || !area ){
                         message='请选择地区'
                     }
-                    else if(!receiverAddress){
+                    else if(!addressDetail){
                         message='请填写详细街道地址'
                     }
                     if(message){
@@ -207,17 +221,32 @@
                         return;
                     }
                     console.log("2222222")
-                    params = {
-                            receiverName,
-                            receiverMobile,
-                            receiverProvince,
-                            receiverCity,
-                            receiverDistrict,
-                            receiverAddress,
-                            receiverZip
+                    if(userAction === 1) {
+                        params = {
+                        userId: this.$store.state.user.userId,
+                        addressId,
+                        name,
+                        phone,
+                        province,
+                        city,
+                        area,
+                        addressDetail,
+                        isDefault
                         }
+                    } else {
+                        params = {
+                            userId: this.$store.state.user.userId,
+                            name,
+                            phone,
+                            province,
+                            city,
+                            area,
+                            addressDetail,
+                            isDefault
+                        }
+                    } 
                 }
-                this.axios[method](url,params).then(()=>{
+                this.yhRequest[method](url,params).then(()=>{
                     this.getAdress();
                     this.closeModal();
                     this.$message.success("操作成功！")
@@ -233,8 +262,10 @@
             },
             //进入页面获取登陆人的收获地址
             getAdress(){
-              this.axios.get('/shippings').then((res)=>{
-                  this.addressList=res.list;
+              this.yhRequest.get(`/api/address/queryByUserId/${this.$store.state.user.userId}`).then((res)=>{
+                    this.addressList=res;
+                    
+                    console.log(this.hasDefault)
               })
             },
             //获取购物车所有选中商品的列表
@@ -271,199 +302,14 @@
                 // })
                 this.$router.push('/order/pay')
 
-            }
+            },
         },
-
+        
 
     }
 </script>
 
 <style lang="scss">
     @import '../assets/scss/config.scss';
-.order-confirm{
-    width: 1226px;
-    margin: 0 auto 60px auto;
-    box-sizing: border-box;
-    transform: translateY(30px);
-    background-color: white;
-    padding: 30px 30px 30px 30px;
-    border-radius: 30px;
-    .address-box{
-        display: flex;
-        justify-content: flex-start;
-
-        .addAddress{
-            &.checkedAddress{
-                border: 1px solid #FF6600;
-            }
-            padding: 20px;
-            box-sizing: border-box;
-            width: 270px;
-            height: 180px;
-            margin: 13px 15px 30px 0px;
-            border: 1px solid #e5e5e5;
-            color: #666666;
-            font-size: 14px;
-            .name{
-                font-size: 26px;
-                color: #666666;
-                margin-bottom: 20px;
-            }
-            .deleteEdit{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                cursor: pointer;
-                margin-top: 25px;
-            }
-            &:last-child{
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                .address-img{
-                    cursor: pointer;
-                    vertical-align: middle;
-                }
-            }
-
-        }
-    }
-    .payingList{
-        display: flex;
-        margin-top: 15px;
-        padding: 10px 5px 10px 0px ;
-        border-top:  1px solid #e5e5e5;
-
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-        img{margin-left: 20px;
-            width: 60px;
-            height: 50px;
-        }
-        .total{
-            font-size: 16px;
-            color:$colorA;
-            font-weight:bold;
-        }
-    }
-    .detail{
-        border-top: 1px solid #e5e5e5 ;
-        line-height: 16px;
-        padding-bottom:15px ;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #e5e5e5;
-        .additional{
-            font-size: 17px;
-            font-weight: bold;
-            p{
-                margin:20px 0 40px 0;
-                span{
-                    margin:0 30px 0 30px;
-                    font-size: 14px;
-                    color: $colorA;
-                }
-                &:last-child{
-                    margin-bottom: 20px;
-                    span{
-                        &:nth-child(1){
-                            margin-left: 60px;
-                        }
-                    }
-                }
-            }
-        }
-        .summary{
-            float: right;
-            .summary-box{
-                font-weight: bold;
-                p{
-                    margin-bottom: 15px;
-                    font-size: 14px;
-                    color: #666666;
-                    span{
-                        font-size:14px;
-                        color: $colorA;
-                    }
-                    &:nth-child(4){
-                        span{
-                            margin-left: 32px;
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-    .addressFooter{
-        text-align: right;
-        height: 60px;
-        padding: 5px 0;
-        box-sizing: border-box;
-        button { 
-            width: 202px;
-            height: 50px;
-            font-size: 18px;
-            color: #777;
-            border: none;
-            cursor: pointer;
-            &:hover {
-                border: 2px solid #fff;
-            }
-            &:last-child{
-                margin-left: 20px;
-            }
-        }
-        .goPay {
-            background-color: $colorA;
-            color: #fff;
-        }
-    }
-}
-    .addAddressForm{
-     font-size: 14px;
-        .item{
-            margin-bottom: 15px;
-          input{
-              padding-left: 15px;
-              box-sizing: border-box;
-              border: 1px solid #e5e5e5;
-              width: 283px;
-              height: 40px;
-              &+ input{                     /*第一种方法  兄弟元素*/
-                  margin-left:14px ;
-              }
-          }
-
-            /*&:first-child{             第二种方法 兄弟元素 */
-            /*    input{*/
-            /*        &:last-child{*/
-            /*            margin-left: 10px;*/
-            /*        }*/
-            /*    }*/
-            /*}*/
-            select{
-                width: 100px;
-                height: 40px;
-                line-height: 40px;
-                padding-left: 13px;
-                border: 1px solid #e5e5e5;
-                margin-right: 10px;
-            }
-            textarea{
-                border: 1px solid #e5e5e5;
-                width: 579px;
-                height: 62px;
-                line-height: 62px;
-                padding-left: 15px;
-            }
-        }
-    }
-    .clearfloat:after{
-        content: '';
-        display: block;
-        clear: both;
-    }
+    @import '../assets/scss/orderComfirm.scss'
 </style>

@@ -60,7 +60,9 @@ import ServiceBar from '../../components/ServiceBar.vue'
                 immediate: true,
                 handler(val) {
                     if(val.fullPath=== '/myInfo') {
-                        console.log('个人中心')
+                        this.nowPage = 1
+                    } else {
+                        this.nowPage = 2
                     }
                 }
             }
@@ -134,7 +136,7 @@ import ServiceBar from '../../components/ServiceBar.vue'
             width: 995px;
             box-sizing: border-box;
             background-color: #fff;
-            padding: 20px 30px;
+            padding: 20px 20px;
         }
     }
 }

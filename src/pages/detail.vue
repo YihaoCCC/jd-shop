@@ -8,8 +8,8 @@
         <div class="detailContent">
             <div class="safeContent content">
                 <div class="leftContent">
-                    <img v-if="total.length ===0" :src="detail.photoUrl" alt="">
-                    <img v-else :src="total.versionPhotoUrl" alt="">
+                    <img v-if="choosedItem.length ===0" :src="detail.photoUrl" alt="">
+                    <img v-else :src="choosedItem.versionPhotoUrl" alt="">
                 </div>
                 <div class="rightContent">
                     <div class="detail">
@@ -18,6 +18,9 @@
                             <p style="line-height:18px;">{{detail.goodsDetail}}</p>
                             <svg t="1637745152505" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2332" width="30" height="30"><path d="M627.94 474.05c-54.819 0-99.511-50.64-99.511-112.693v-37.618h199.022v37.618c0 62.214-44.692 112.693-99.511 112.693zM64.343 361.356v-37.618h199.022v37.618c0 62.054-44.692 112.693-99.511 112.693s-99.511-50.478-99.511-112.693zM495.408 73.336v225.387H305.71l49.836-225.387z" fill="#F3797D" p-id="2333"></path><path d="M668.291 73.336l49.836 225.387H528.429V73.336zM296.386 323.899h199.022v37.457c0 62.054-44.692 112.693-99.511 112.693s-99.511-50.64-99.511-112.693v-37.457zM760.311 323.899h199.022v37.457c0 62.054-44.692 112.693-99.511 112.693-54.82 0-99.511-50.64-99.511-112.693v-37.457z" fill="#3A5CAC" p-id="2334"></path><path d="M938.917 298.723h-185.84L703.241 73.336h136.004z" fill="#F3797D" p-id="2335"></path><path d="M184.27 73.336h136.165l-49.836 225.387H84.759zM97.203 495.368c10.771 2.411 21.864 3.697 33.117 3.697 54.176 0 101.194-13.737 132.628-75.236 30.223 45.656 78.451 75.236 132.628 75.236s102.405-29.58 132.628-75.236c22.934 50.221 59.088 67.269 99.511 71.378v454.471H97.203v-454.31z" fill="#3A5CAC" p-id="2336"></path><path d="M909.786 950H644.37V495.368c40.512-9.324 75.558-35.367 99.511-71.378 30.223 45.656 78.451 75.236 132.628 75.236 11.414 0 22.346-1.286 33.117-3.697V950h0.16z" fill="#F3797D" p-id="2337"></path><path d="M793.685 686.995c0 20.738-14.79 37.618-33.117 37.618-18.327 0-33.117-16.88-33.117-37.618 0-20.738 14.79-37.618 33.117-37.618 18.326 0 33.117 16.88 33.117 37.618z" fill="#FFFFFF" p-id="2338"></path></svg>
                             <h4 style="display:inline-block;margin-left: 20px">京东自营（达达利亚小组）</h4>
+                            <div class="promotion" v-show="detail.promotionDetail">
+                                {{detail.promotionDetail}}
+                            </div>
                             <div style="margin-top:14px">
                             <span>{{detail.goodsPrice | price}}元 </span><em style="text-decoration: line-through;margin-left:10px">2999元</em>
                         </div>
@@ -49,18 +52,18 @@
                         
                         <div class="total" >
                             <span style="">{{detail.name}}</span>
-                            <div v-if="total.length===0">请选择商品属性</div>
+                            <div v-if="choosedItem.length===0">请选择商品属性</div>
                             <div v-else class="total-version-money">
                             <div class="choose-version-color" v-for="(item,index) in versionDetail" :key=index :style="version!==index?'display:none':''" >
                                 {{version === index ? item.goodsVersionDetail:''}}
                             </div>
-                            <p>总计: {{this.total.goodsPrice}} 元</p>
+                            <p>总计: {{this.choosedItem.goodsPrice}} 元</p>
                             </div>
                         </div>
 
                         <div class="detail-btn">                      
                             <button  @click="GoOrderConfrim"> 立即购买</button>
-                            <div class="btn-like">
+                            <div class="btn-like" @click="addCollect">
                                 加入收藏夹
                             </div>
                         </div>
@@ -80,8 +83,18 @@
             content="添加购物车成功！"
             SureText="查看购物车"
             @CancelClick='cancel()'
-            @SureClick = 'sure()'
+            @SureClick ='GoCart()'
         ></model>
+        <model
+            :IsShow="isShowCollect"
+            :btnType="1"
+            content="添加收藏夹成功！"
+            SureText="查看我的收藏夹"
+            @CancelClick='cancel()'
+            @SureClick='GoCollect()'
+        >
+
+        </model>
     </div>
 </template>
 <script>
@@ -95,13 +108,14 @@ export default {
         Model
     },
     mounted() {
-    //    this.detail = this.$route.query.detail
         this.getGoodsDetail()
-        console.log(this.$route.params.id)
     },
     computed: {
         isChoose() {
             return this.version <= this.detail.goodsVersions.length ? true : false
+        },
+        userName () {
+            return this.$store.state.user.userId
         }
     },
     filters: {
@@ -117,9 +131,10 @@ export default {
             message: '产品详情',
             detail: {},
             version: 6,
-            total: [],
+            choosedItem: [],
             versionDetail: [],
-            isShow: false   
+            isShow: false,
+            isShowCollect: false   
         }
     },
     methods: {
@@ -134,14 +149,15 @@ export default {
             })
         },
         addCart(){
-            if(this.isChoose) {
+            if(this.userName) {
+                if(this.isChoose) {
                 // 发送请求
                 this.yhRequest.post('/api/shoppingCart/addOnce',{
                    
                         userId: this.$store.state.user.userId,
-                        goodsId: this.total.goodsId,
-                        goodsVersionId: this.total.goodsVersionId, 
-                        goodsPrice: this.total.goodsPrice, //double
+                        goodsId: this.choosedItem.goodsId,
+                        goodsVersionId: this.choosedItem.goodsVersionId, 
+                        goodsPrice: this.choosedItem.goodsPrice, //double
                         goodsNumber: 1 //int
                     
                 }).then((res) => {
@@ -151,30 +167,57 @@ export default {
                         return Promise(res)
                     }
                 })
+                } else {
+                    this.$message.error('请选择商品属性')
+                }
             } else {
-                this.$message.error('请选择商品属性')
+                console.log('未登录')
+                this.$store.dispatch('changeIsShow', true)
             }
+            
                 
+        },
+        addCollect() {
+            if(this.userName) {
+                this.yhRequest.post('/api/collection/add', {
+                    userId: this.$store.state.user.userId,
+                    goodsId: this.detail.goodsId
+                }).then((res) => {
+                    if(res) {
+                        this.isShowCollect = true
+                    } else {
+                        this.$message.info('该商品已在收藏夹啦！')
+                    }
+                })
+            } else {
+                this.$store.dispatch('changeIsShow', true)
+            }     
         },
         choose(item,index){
                 this.version=index;
-                this.total=item; 
-                console.log(this.total);
-                
+                this.choosedItem=item; 
+        
         },
-         cancel() {
+        cancel() {
             this.isShow = false
+            this.isShowCollect = false
         },
-        sure() {
+        GoCart() {
             this.$router.push('/myCart')
         },
+        GoCollect() {
+            this.$router.push('/collect')
+        },
         GoOrderConfrim() {
-            if(this.isChoose) {
-                this.$router.push('/order/confirm')
+            if(this.userName) {
+                if(this.isChoose) {
+                    this.$router.push('/order/confirm')
+                } else {
+                    this.$message.error('请选择商品属性')
+                }
             } else {
-                this.$message.error('请选择商品属性')
+                this.$store.dispatch('changeIsShow' ,true)
             }
-           
         }
     }
 }

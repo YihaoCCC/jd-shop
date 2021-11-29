@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 const state={
     user:{}, 
+    isShowGoToLogin: false
 }
 export  default new Vuex.Store({
     state,

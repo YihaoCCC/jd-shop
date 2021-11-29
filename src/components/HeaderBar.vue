@@ -27,7 +27,7 @@
                 <span @click="noneEvent">哒哒会员</span>
                 <span @click="GoColloect">我的收藏</span>
                 <span @click="GoToOrder">我的订单</span>
-                <span @click="gotoCart">购物车</span>
+                <span @click="gotoCart">我的购物车</span>
                 
             </div>
         </div>
@@ -39,17 +39,6 @@
             @CancelClick='cancel'
             :IsShow="showLogOut"
         ></model>
-        <model
-            title="来自哒哒利亚的提示"
-            content="当前未登录，是否跳转至登录界面？"
-            SureText="确认"
-            CancelText="稍后登录"
-            @SureClick='toLogin'
-            @CancelClick='cancel'
-            :IsShow="isShow"
-            >
-
-    </model>
     </div>
 </template>
 <script>
@@ -65,7 +54,6 @@ export default {
             message: '我是headerBar',
             showBack: false,
             showLogOut: false,// 退出登录弹框
-            isShow: false, // 是否去登录界面弹框
         }
     },
     computed: {
@@ -76,7 +64,7 @@ export default {
         }
     },
     mounted(){
-        
+       
     },
     watch:{
         $route: {
@@ -97,34 +85,34 @@ export default {
             if(this.userName) {
                 this.$router.push('/myCart')
             } else {
-                this.isShow = true
+                this.$store.dispatch('changeIsShow', true) 
             }
         },
         backIndex() {
             this.$router.push('/')
         },
         toLogin() {
-            this.$router.push('/login')
+            this.GoLogin()
         },
         GoToOrder() {
             if(this.userName) {
                 this.$router.push('/order/list')
             } else {
-                this.isShow = true
+                this.$store.dispatch('changeIsShow', true) 
             }
         },
         GoColloect() {
             if(this.userName) {
                 this.$router.push('/collect')
             } else {
-                this.isShow = true
+                this.$store.dispatch('changeIsShow', true) 
             }
         },
         GoToProfile() {
             if(this.userName) {
                 this.$router.push('/profile')
             } else {
-                this.isShow = true
+                this.$store.dispatch('changeIsShow', true) 
             }
         },
         LogOut() {
@@ -132,6 +120,7 @@ export default {
         },
         out() {
             this.$cookie.set('userId','',{expires:'-1'});
+            this.$store.dispatch('saveUser', {})
             this.showLogOut = false
             this.$router.push('/').then(() => {
                 history.go(0)
@@ -140,7 +129,6 @@ export default {
         },
         cancel() {
             this.showLogOut = false
-            this.isShow =false
         },
         noneEvent() {
             this.$message.warning('该功能暂未开放')
@@ -216,7 +204,8 @@ export default {
                                 }
                             }
                             &:last-child {
-                                border:none
+                                border:none;
+                                
                             }
                         }
                     }
@@ -229,7 +218,7 @@ export default {
                         margin-left: 10px ;
                     }
                     &:last-child {
-                        margin-left: 0;
+                        margin: 0;
                         &::after{
                          content: ' ';
                         }

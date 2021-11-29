@@ -29,6 +29,9 @@ Vue.use(cookie)
 Vue.prototype.$message = Message
 // Vue.prototype.$msgbox = MessageBox;
 // Vue.component(Message.name,Message);
+Vue.prototype.GoLogin = function() {
+    router.push('/login')
+}
 
 new Vue({
   router,

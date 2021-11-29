@@ -1,0 +1,206 @@
+.order-confirm{
+    width: 1226px;
+    margin: 0 auto 60px auto;
+    box-sizing: border-box;
+    transform: translateY(30px);
+    background-color: white;
+    padding: 30px 30px 30px 30px;
+    border-radius: 30px;
+    .address-box{
+        display: flex;
+        justify-content: flex-start;
+
+        .addAddress{
+            position: relative;
+            overflow: hidden;
+            .default {
+                position: absolute;
+                top: -50px;
+                right: -50px;
+                width: 110px;
+                height: 110px;
+                padding: 0 25px;
+                box-sizing: border-box;
+                line-height: 150px;
+                text-align: left;
+                border-radius: 60px;
+                background-color: #ffc06e;                
+                font-size: 24px;
+                color: #fff;
+            }
+            .address {
+                height: 40px;
+            }
+            &.checkedAddress{
+                border: 1px solid #FF6600;
+            }
+            padding: 20px;
+            box-sizing: border-box;
+            width: 270px;
+            height: 180px;
+            margin: 13px 15px 30px 0px;
+            border: 1px solid #e5e5e5;
+            color: #666666;
+            font-size: 14px;
+            .name{
+                font-size: 26px;
+                color: #666666;
+                margin-bottom: 20px;
+            }
+            .deleteEdit{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                margin-top: 5px;
+            }
+            &:last-child{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                .address-img{
+                    cursor: pointer;
+                    vertical-align: middle;
+                }
+            }
+
+        }
+    }
+    .payingList{
+        display: flex;
+        margin-top: 15px;
+        padding: 10px 5px 10px 0px ;
+        border-top:  1px solid #e5e5e5;
+
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        img{margin-left: 20px;
+            width: 60px;
+            height: 50px;
+        }
+        .total{
+            font-size: 16px;
+            color:$colorA;
+            font-weight:bold;
+        }
+    }
+    .detail{
+        border-top: 1px solid #e5e5e5 ;
+        line-height: 16px;
+        padding-bottom:15px ;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e5e5e5;
+        .additional{
+            font-size: 17px;
+            font-weight: bold;
+            p{
+                margin:20px 0 40px 0;
+                span{
+                    margin:0 30px 0 30px;
+                    font-size: 14px;
+                    color: $colorA;
+                }
+                &:last-child{
+                    margin-bottom: 20px;
+                    span{
+                        &:nth-child(1){
+                            margin-left: 60px;
+                        }
+                    }
+                }
+            }
+        }
+        .summary{
+            float: right;
+            .summary-box{
+                font-weight: bold;
+                p{
+                    margin-bottom: 15px;
+                    font-size: 14px;
+                    color: #666666;
+                    span{
+                        font-size:14px;
+                        color: $colorA;
+                    }
+                    &:nth-child(4){
+                        span{
+                            margin-left: 32px;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    .addressFooter{
+        text-align: right;
+        height: 60px;
+        padding: 5px 0;
+        box-sizing: border-box;
+        button { 
+            width: 202px;
+            height: 50px;
+            font-size: 18px;
+            color: #777;
+            border: none;
+            cursor: pointer;
+            &:hover {
+                border: 2px solid #fff;
+            }
+            &:last-child{
+                margin-left: 20px;
+            }
+        }
+        .goPay {
+            background-color: $colorA;
+            color: #fff;
+        }
+    }
+}
+    .addAddressForm{
+     font-size: 14px;
+        .item{
+            margin-bottom: 15px;
+          input{
+              padding-left: 15px;
+              box-sizing: border-box;
+              border: 1px solid #e5e5e5;
+              width: 283px;
+              height: 40px;
+              &+ input{                     /*第一种方法  兄弟元素*/
+                  margin-left:14px ;
+              }
+          }
+
+            /*&:first-child{             第二种方法 兄弟元素 */
+            /*    input{*/
+            /*        &:last-child{*/
+            /*            margin-left: 10px;*/
+            /*        }*/
+            /*    }*/
+            /*}*/
+            select{
+                width: 100px;
+                height: 40px;
+                line-height: 40px;
+                padding-left: 13px;
+                border: 1px solid #e5e5e5;
+                margin-right: 10px;
+            }
+            textarea{
+                border: 1px solid #e5e5e5;
+                width: 579px;
+                height: 62px;
+                line-height: 62px;
+                padding-left: 15px;
+            }
+        }
+    }
+    .clearfloat:after{
+        content: '';
+        display: block;
+        clear: both;
+    }

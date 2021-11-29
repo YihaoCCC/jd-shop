@@ -1,14 +1,17 @@
 <template>
  <div class="collections">
-        <h3>我的收藏</h3>  
-       <div>
+        <h3>我的收藏</h3> 
+       <div class="collectContent">
             <goods-item
-            v-for="item in 4"
-            :key="item"
-        >
-
-        </goods-item>
+                v-for="item in collectionList"
+                :key="item.goodsId"
+                :GoodsItem="item"
+            >
+            </goods-item>
+        
        </div>
+        <button @click="LoadMore" v-if="closeLoadMore">加载更多</button>
+       
     </div>
 </template>
 
@@ -17,15 +20,64 @@ import GoodsItem from '../../../components/GoodsItem.vue';
     export default {
         components: {
             GoodsItem
+        },
+        mounted() {
+            this.getCollection()
+        },
+        data() {
+            return {
+                pageNum: 1,
+                collectionList: [],
+                closeLoadMore: true
+            }
+        },
+        methods: {
+            getCollection() {
+                this.yhRequest.get(`/api/collection/queryByUserId/${this.$store.state.user.userId}&${this.pageNum}`).then((res) => {
+                    if(res.length) {
+                        this.collectionList.push(...res)
+                    } else {
+                        this.$message.warning('已经到底啦！')
+                        this.closeLoadMore = false
+                    }
+                })
+            },
+            LoadMore() {
+                this.pageNum ++
+                this.getCollection()
+            }
         }
     }
 </script>
 <style scoped lang='scss'> 
 .collections {
+    text-align: center;
     h3 {
-        margin-bottom: 10px;
-        padding-bottom: 2px;
+        text-align: left;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
         border-bottom: 2px solid #E1251B;
+    }
+    .collectContent{
+        display: flex;
+        padding: 30px 15px 0 0;
+        box-sizing: border-box;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        height: 400px;
+        overflow-y: scroll;
+    }
+    button {
+        width: 100px;
+        height: 40px;
+        border-radius: 20px;
+        background-color: #E1251B;
+        color: #fff;
+        border: 2px solid #fff;
+        margin-top: 40px ;
+        &:hover {
+            border: 2px solid #E1251B;
+        }
     }
 
 }

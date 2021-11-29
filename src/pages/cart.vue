@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-bar></header-bar>
+        <header-bar class="tipFixedTop"></header-bar>
         <order-header HeaderTitle="我的购物车">
                 <template v-slot:description>
                     <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
@@ -19,7 +19,7 @@
                     <li class="col-1">操作</li>
                 </ul>
                 <ul class="cart-body-list" v-for="(item,index) in List " :key="index">
-                    <div class="checkbox" :class="{'checked':item.productSelected }" @click="changeSelectedItem(item)"></div>
+                    <div class="checkbox" :class="{'checked':item.isChose }" @click="changeSelectedItem(item)"></div>
                     <li class="item-img">
                         <img :src="item.versionPhotoUrl"  alt="">
                     </li>
@@ -30,7 +30,12 @@
                         </div>
                         
                     </li>
-                    <li class="item-price">{{item.price}}元</li>
+                    <li class="item-price">{{item.price}}元
+                        <div v-show="item.promotionDetail" class="promotion">
+                           {{item.promotionDetail}}
+                        </div>
+                        
+                    </li>
                     <div class="item-num">
                         <div class="num-box">
                             <span @click="updataGoodsNum(item,1)" style="cursor: pointer" >-</span>
@@ -87,23 +92,37 @@ export default {
         return {
             message: '我是购物车界面',
             List: [],           // 购物车数据
-            allCheck: false,
-            cartTotalPrice:0,
-            checkNum:0,
             showModal:false,    // 控制弹框
             item:{},            // 弹框时候的ID中转站
             loading: true       // 页面加载的loading组件
         }
     },
     mounted() {
-        this.getCartList()
+        setTimeout(() => {
+            this.getCartList()
+        },1000)
     },
     computed: {
         itemTotalPrice() {
             return function(num,price) {
                 return num*price
             }
+        },
+        allCheck() {
+            return this.List.every((item) => {
+                return  item.isChose === 1
+            })
+        },
+        checkNum() {
+            return this.List.filter((i)=> i.isChose).length;
+        },
+        cartTotalPrice() {
+           
+            let total = this.List.filter((item) => item.isChose === 1).reduce((total,i) => total+i.price*i.num,0)
+            
+            return total
         }
+
     },
     methods: {
         showmodal(item){
@@ -122,25 +141,45 @@ export default {
             },
             //全部选中
             selectAll(){
-              let url = this.allCheck?'/carts/unSelectAll':'/carts/selectAll';
-              this.axios.put(url).then((res)=>{
-                  this.randerData(res)
-              })
+                // let isSelectAll = this.List.filter((i) => {
+                //    return i.isChecked === true
+                // }) 
+                // if(isSelectAll.length<this.List.length) { //先判断是不是只有一部分被选中了，如果是就先全部选择中
+                //     this.List.map((item) => {
+                //         return item.isChecked = true
+                //     })
+                // } else {
+                //     this.List.map((item) => {
+                //         item.isChecked = !item.isChecked
+                //     })
+                // }
+                this.yhRequest.get(`/api/shoppingCart/chooseAll/${this.$store.state.user.userId}`).then((res) => {
+                    this.randerData(res)
+                })
+                
             },
             //重新渲染数据函数
             randerData(res){
-                this.List = res;
-
-                // this.allCheck = res.selectedAll;
-                // this.cartTotalPrice = res.cartTotalPrice;
-                // this.checkNum=this.List.filter((i)=> i.productSelected).length;
+                let newResList = res.map((item) => {
+                    // item.isChecked = false // 添加新的isChecked属性
+                    // this.$set(item, 'promotion', 1)
+                    return item
+                }) 
+                console.log(newResList)
+                this.List = newResList;
             },
             changeSelectedItem(item){
-                let selected = !item.productSelected;
-                this.axios.put(`/carts/${item.productId}`,{
-
-                    selected,
-                }).then((res)=> this.randerData(res))
+                item.isChose = item.isChose ? 0 : 1
+                 this.yhRequest.post('/api/shoppingCart/modify',{
+                        userId: this.$store.state.user.userId,
+                        goodsId: item.goodsId,
+                        goodsVersionId: item.goodsVersionId,
+                        goodsPrice: item.price,
+                        goodsNumber: item.num,
+                        isChose: item.isChose
+                    }).then((res) => {
+                        this.randerData(res)
+                })
             },
             //修改商品加购数量
             updataGoodsNum(item,type){
@@ -158,14 +197,15 @@ export default {
                         goodsId: item.goodsId,
                         goodsVersionId: item.goodsVersionId,
                         goodsPrice: item.price,
-                        goodsNumber: item.num
+                        goodsNumber: item.num,
+                        isChose: item.isChose
                     }).then((res) => {
                         this.randerData(res)
                 })
             },
             //删除此列所有商品
             deleteOneList(item){
-                this.yhRequest.delete('/api/shoppingCart/delete', {  
+                this.yhRequest.post('/api/shoppingCart/delete', {  
                     userId: this.$store.state.user.userId,
                     goodsId: item.goodsId,
                     goodsVersionId: item.goodsVersionId
@@ -177,7 +217,7 @@ export default {
             }, 
             //跳转到订单界面 去支付
             goOrder(){
-                let judgeStatus = this.List.every(item=>item.productSelected===false);//(和  （item=>!item.productSelected）作用相等)
+                let judgeStatus = this.List.every(item=>item.isChecked === false);//(和  （item=>!item.productSelected）作用相等)
                 if(judgeStatus){
                   this.$message.warning("请至少选择一件商品！")
                 }
@@ -190,6 +230,11 @@ export default {
 </script>
 <style scoped lang='scss'>
 @import '../assets/scss/config.scss';
+.tipFixedTop {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 .cart{
         box-sizing: border-box;
         background-color: #f5f5f5;
@@ -227,6 +272,7 @@ export default {
                     vertical-align: middle;
                     border: 1px solid #E5E5E5;
                     text-align: center;
+                    cursor: pointer;
                     background-size: 16px 12px;
                     &.checked{
                         background: url("./../assets/imgs/icon-gou.png") $colorA no-repeat center;
@@ -300,6 +346,8 @@ export default {
                 }
                 .item-price{
                     flex: 1;
+                    flex-direction: column;
+                    justify-content: center;
                 }
                 .item-num{
                     flex: 2;

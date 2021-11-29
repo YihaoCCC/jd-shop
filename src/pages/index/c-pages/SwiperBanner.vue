@@ -30,7 +30,7 @@
             <div class="info">
                 Hi ~欢迎逛商城！
                 <div class="nologin" >
-                    <p v-if="!userName" @click="GoLogin">登陆 | 注册</p>
+                    <p v-if="!userName" @click="GoLogin" style=" cursor: pointer;">登陆 | 注册</p>
                     <p v-else style="font-weight: bolder;color:#E1251B">{{userName}}</p>
                 </div>
             </div>
@@ -113,37 +113,27 @@
         </div>
     </div>
    </div>
-    <model
-      content="当前未登录，是否跳转至登录界面？"
-      SureText="确认"
-      CancelText="稍后登录"
-      @SureClick='GoLogin'
-      @CancelClick='cancel'
-      :IsShow="isShow"
-    >
-
-    </model>
   </div>
 </template>
 <script>
 import NavMenu from '@/components/NavMenu';
-import Model from '../../../components/Model.vue';
+
+import {mapState} from 'vuex'
 // import {MessageBox} from 'element-ui';
 export default {
     components: {
         NavMenu,
-        Model
     },
     computed: {
       userName: {
         get() {
           return this.$store.state.user.userName
         }
-      }
+      },
+      ...mapState(['isShowGoToLogin'])
     },
   data() {
     return {
-      isShow: false,
       swiperImg: [
         {
           id: 1,
@@ -250,9 +240,6 @@ export default {
     GoLogin() {
       this.$router.push('/login')
     },
-    cancel() {
-      this.isShow = false
-    },
     GoProfile(e) {
       if(this.userName) {
         this.$router.push('/profile')
@@ -270,7 +257,7 @@ export default {
         //     message: '已取消登录'
         //   });          
         // })
-        this.isShow = true
+        this.$store.state.isShowGoToLogin = true 
       }
       e.preventDefault()
     }
