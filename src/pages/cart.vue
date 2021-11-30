@@ -56,7 +56,7 @@
                     <div style="display: inline-block;margin-left: 37px">共 <span class="num"> {{List.length}} </span> 件商品，已选择 <span class="num"> {{checkNum}} </span> 件</div>
                 </div>
                 <div class="footer-right">
-                    <p style="display: inline-block">合计：<span>{{cartTotalPrice}}</span>元</p>
+                    <p style="display: inline-block">合计：<span>{{originPrice}}</span>元</p>
                     <button class="goPay" @click="goOrder" >
                         去结算
                     </button>
@@ -94,7 +94,9 @@ export default {
             List: [],           // 购物车数据
             showModal:false,    // 控制弹框
             item:{},            // 弹框时候的ID中转站
-            loading: true       // 页面加载的loading组件
+            loading: true,      // 页面加载的loading组件
+            originPrice: 0,
+            lastPrice: 0
         }
     },
     mounted() {
@@ -160,13 +162,14 @@ export default {
             },
             //重新渲染数据函数
             randerData(res){
-                let newResList = res.map((item) => {
-                    // item.isChecked = false // 添加新的isChecked属性
-                    // this.$set(item, 'promotion', 1)
-                    return item
-                }) 
-                console.log(newResList)
-                this.List = newResList;
+                // let newResList = res.map((item) => {
+                //     // item.isChecked = false // 添加新的isChecked属性
+                //     // this.$set(item, 'promotion', 1)
+                //     return item
+                // }) 
+                this.List = res.goodsList
+                this.originPrice = res.oriTotal
+                this.lastPrice = res.total
             },
             changeSelectedItem(item){
                 item.isChose = item.isChose ? 0 : 1
@@ -217,8 +220,10 @@ export default {
             }, 
             //跳转到订单界面 去支付
             goOrder(){
-                let judgeStatus = this.List.every(item=>item.isChecked === false);//(和  （item=>!item.productSelected）作用相等)
-                if(judgeStatus){
+                
+                // let judgeStatus = this.List.every(item=>item.isChose === 0);//(和  （item=>!item.productSelected）作用相等)
+                let judgeStatus = this.List.find(i => i.isChose===1)
+                if(!judgeStatus){
                   this.$message.warning("请至少选择一件商品！")
                 }
                 else {

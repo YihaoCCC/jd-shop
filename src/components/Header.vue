@@ -103,10 +103,17 @@ export default {
             }
         },
         search() {
-            this.yhRequest.get(`/api/goods/queryByGoodsName/${this.searchGoods}`).then((res) => {
-                console.log(res)
-            })
-            this.$router.push('/search')
+            if(this.searchGoods) {
+                    this.$router.push({
+                        path:'/search',
+                        query: {
+                            searchGoods: this.searchGoods
+                        }
+                    })
+            } else {
+                this.$message.info('请输入商品名称后再搜索')
+            }
+            
         }
     }
 }

@@ -138,13 +138,6 @@
           Modal
         },
         name: "orderConfirm",
-        computed: {
-           hasDefault() {
-               return this.addressList.find((i) => {
-                    return i.isDefault === 1
-                })
-           }
-        },
         data(){
           return{
               addressList:[],      //收获地址列表
@@ -264,8 +257,14 @@
             getAdress(){
               this.yhRequest.get(`/api/address/queryByUserId/${this.$store.state.user.userId}`).then((res)=>{
                     this.addressList=res;
-                    
-                    console.log(this.hasDefault)
+                    let defaultAddress = res.findIndex((i) => {
+                        return i.isDefault === 1
+                    } )
+                    if(defaultAddress > 0) {
+                        this.selectedAddress = defaultAddress
+                    } else {
+                        this.selectedAddress = 0
+                    }    
               })
             },
             //获取购物车所有选中商品的列表

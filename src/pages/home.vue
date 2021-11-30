@@ -2,7 +2,7 @@
     <div>
         <header-bar></header-bar>
         <Header></Header>
-        <router-view></router-view>
+            <router-view></router-view>
         <service-bar></service-bar>
         <Footer></Footer>
         
@@ -19,15 +19,6 @@ export default {
       Header,
       Footer,
       ServiceBar
-    },
-  
-    data() {
-        return {
-            
-        }   
-    },
-    methods: {
-
-    },
+    }
 }
 </script>

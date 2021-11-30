@@ -39,6 +39,7 @@
     </div>
 </template>
 <script>
+import testPhone from '@/utils/testPhone'
     export default {
         name: 'register',
         data() {
@@ -55,26 +56,32 @@
                this.$router.push('/index')
            },
            Regsiter() {
+               let message =  testPhone.testPhone(this.phone)
                if(this.phone && this.password && this.nickname) {
-                    if(!this.agree) {
-                        this.$message.error('请先勾选服务条款')
-                    } else {
-                        // console.log(this.username+this.password + this.nickname+ this.sex)
-                        this.yhRequest.post('/api/user/register', {
-                           
-                            phone: this.phone,
-                            pswd: this.password,
-                            userName: this.nickname,
-                            sex: this.sex
-                           
-                        }).then ((res) => {
-                           if(res) {
-                               this.$router.push('/login')
-                           } else {
-                               this.$message.error('注册失败，手机号已存在')
-                           }
-                        })
-                    }
+                   if(message === 1) {
+                        if(!this.agree) {
+                            this.$message.error('请先勾选服务条款')
+                        } else {
+                            // console.log(this.username+this.password + this.nickname+ this.sex)
+                            this.yhRequest.post('/api/user/register', {
+                            
+                                phone: this.phone,
+                                pswd: this.password,
+                                userName: this.nickname,
+                                sex: this.sex
+                            
+                            }).then ((res) => {
+                            if(res) {
+                                this.$router.push('/login')
+                            } else {
+                                this.$message.error('注册失败，手机号已存在')
+                            }
+                            })
+                        }
+                   } else {
+                       this.$message.error(message)
+                   }
+                   
                } else {
                     this.$message.error('账号、昵称、密码不能为空') 
                }

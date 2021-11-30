@@ -11,17 +11,22 @@
         </goods-item>
 
     </div>
-   <div class="loadMore" v-show="showMore">
+   <div class="loadMore" v-if="showMore">
        <button @click="LoadMore" >加载更多</button>
    </div>
+    <end-data
+        v-else
+    ></end-data>
    
 </div>
 
 </template>
 <script>
 import GoodsItem from '../../../components/GoodsItem.vue'
+import EndData from '@/components/EndData'
+
 export default {
-  components: { GoodsItem },
+  components: { GoodsItem, EndData },
     name: 'Recommand',
     data() {
         return {

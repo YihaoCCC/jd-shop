@@ -2,7 +2,7 @@
     
         <div class="item" >
                 
-                <img :src="GoodsItem.photoUrl" :alt="GoodsItem.goodsName" @click="GoToDetail(GoodsItem)">
+                <img :src="GoodsItem.photoUrl" :title="GoodsItem.goodsName" @click="GoToDetail(GoodsItem)">
                 
                 <div class="nameInfo" @click="GoToDetail(GoodsItem)">
                     <span class="self" v-if="GoodsItem.goodsIsSelf === 1">自营</span> 

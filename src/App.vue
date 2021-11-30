@@ -60,5 +60,15 @@ export default {
 @import './assets/scss/config';
 #app{
   background-color: #f7f8f9;
+  
+}
+html{
+  scrollbar-width: none; /* firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+        overflow-x: hidden;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            display: none; /* Chrome Safari */
+        }
 }
 </style>

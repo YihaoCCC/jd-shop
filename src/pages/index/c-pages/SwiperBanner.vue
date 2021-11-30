@@ -30,7 +30,7 @@
             <div class="info">
                 Hi ~欢迎逛商城！
                 <div class="nologin" >
-                    <p v-if="!userName" @click="GoLogin" style=" cursor: pointer;">登陆 | 注册</p>
+                    <p v-if="!userName"  style=" cursor: pointer;"> <span @click="GoToLogin">登陆</span>  | <span @click="GoToRegister">注册</span></p>
                     <p v-else style="font-weight: bolder;color:#E1251B">{{userName}}</p>
                 </div>
             </div>
@@ -237,8 +237,11 @@ export default {
     };
   },
   methods: {
-    GoLogin() {
-      this.$router.push('/login')
+    GoToLogin() {
+      this.GoLogin()
+    },
+    GoToRegister() {
+      this.$router.push('/register')
     },
     GoProfile(e) {
       if(this.userName) {

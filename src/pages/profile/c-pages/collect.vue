@@ -60,12 +60,19 @@ import GoodsItem from '../../../components/GoodsItem.vue';
     }
     .collectContent{
         display: flex;
-        padding: 30px 15px 0 0;
+        padding: 0px 15px 0 0;
         box-sizing: border-box;
         justify-content: space-between;
         flex-wrap: wrap;
         height: 400px;
-        overflow-y: scroll;
+        scrollbar-width: none; /* firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+        overflow-x: hidden;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            display: none; /* Chrome Safari */
+        }
+
     }
     button {
         width: 100px;
