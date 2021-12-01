@@ -1,7 +1,8 @@
 <template>
     <transition name="test-modal">
     <div class="weChat"  v-show="showTranslate"  >
-        <div class="weChat__Back"></div> //遮罩层
+        <!-- //遮罩层 -->
+        <div class="weChat__Back"></div> 
         <div class="weChat__Box" >
             <img src="../assets/imgs/pay/icon-scan.png" alt="" >
             <div class="weChat__Box__Code "  >
@@ -102,7 +103,7 @@
        .weChat__Box__Code{
            background-color: #ffffff;
            width: 370px;
-           height: 340px;
+           height: 360px;
            text-align: center;//只能控制标签元素，不能控制div中的子div，子div要用margin：auto来控制水平居中
            .codeHeader{
                box-sizing: border-box;

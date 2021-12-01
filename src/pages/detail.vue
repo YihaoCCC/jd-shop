@@ -2,7 +2,7 @@
     <div>
         <detail-header :title="detail.goodsName">
             <template v-slot:buy>
-                <button @click="addCart">加入购物车</button>
+                <button @click="GoOrderConfrim">立即购买</button>
             </template>
         </detail-header>
         <div class="detailContent">
@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="detail-btn">                      
-                            <button  @click="GoOrderConfrim"> 立即购买</button>
+                            <button  @click="addCart"> 加入购物车</button>
                             <div class="btn-like" @click="addCollect">
                                 加入收藏夹
                             </div>

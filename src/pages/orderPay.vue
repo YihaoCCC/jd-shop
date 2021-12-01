@@ -9,8 +9,7 @@
                 <div class="header-content">
                     <h2>订单创建成功！快去付款吧~~~~~</h2>
                     <p>请在<span>30分钟内</span>完成支付，超时将会消订单</p>
-                    <p>收获信息：  {{orderAddress.receiverName}}  {{orderAddress.receiverMobile}} {{orderAddress.receiverProvince}}
-                        {{orderAddress.receiverCity}} {{orderAddress.receiverAddress}} </p>
+                    <p>收获信息：  {{orderAddress}} </p>
                 </div>
                 <div class="details">
                     <p>应付金额：<span>{{payTotal}}</span>元</p>
@@ -25,15 +24,17 @@
             <transition name="bounce">
                 <div class="payContent" v-show="showDetail">
                     <p>订单号：<span>{{orderNo}}</span></p>
-                    <p>收货信息：  {{orderAddress.receiverName}}  {{orderAddress.receiverMobile}} {{orderAddress.receiverProvince}}
-                        {{orderAddress.receiverCity}} {{orderAddress.receiverAddress}} </p>
+                    <p>收货信息：  {{orderAddress}} </p>
                 <div class="list">
-                    <p style="display: inline-block">商品详情：</p>
-                    <div class="orderList" v-for="(item,index) in orderList" :key="index">
-                        <img :src="item.productImage" alt="">
+                    <p style="display: block;width:500px;margin:0">商品详情：</p>
+                    <div class="orderList" v-for="(item,index) in orderList" :key="index" :title="item.goodsName+' 型号：'+item.goodsVersionDetail">
+                        <img :src="item.versionPhotoUrl" alt="">
                         <div class="title">
-                            <p style="margin-bottom: 10px" >{{item.productName}} <em style="color: #FF6600;font-weight: bold">X</em> {{item.quantity}}</p>
+                            <p style="margin-bottom: 10px" ><span>{{item.goodsName}}</span> <em style="color: #E1251B;font-weight: bold"> X </em> {{item.number}}</p>
 
+                        </div>
+                        <div style="line-height:38px">
+                            {{item.realPrice}}
                         </div>
                     </div>
                 </div>
@@ -56,7 +57,7 @@
         <we-chat-frame  :show-translate="showWeChat" @cancel="closeWeChat" :img-url="payImg"></we-chat-frame>
         <modal
             title="支付确认"
-            SureText="确认，去我的订单"
+            SureText="我已支付"
             CancelText="未支付"
             :IsShow="showPayModal"
             @SureClick="goToList"
@@ -85,7 +86,7 @@
                 orderNo: this.$route.query.orderNo,
                 orderList:[],
                 payTotal:0,
-                orderAddress:{},
+                orderAddress: '',
                 payType:3,
                 showWeChat:false,
                 payImg:'',//后端返回的微信二维码地址
@@ -94,23 +95,23 @@
         },
         mounted(){
             this.getOrderDetail();
+            console.log(this.orderNo)
         },
         methods:{
             paySubmit(payType){
                 if (payType === 1){
                     this.payType=1;
-                    this.$message.warning("支付链接加载中......")
-                    setTimeout(()=>{
-                        window.open('/#/order/alipay?orderNo='+this.orderNo,"_blank");
+                        // window.open('/#/order/alipay?orderNo='+this.orderNo,"_blank");
+                        this.$message.error("支付宝功能暂不支持，请联系管理员重试......")
                         this.payType=3;
-                    },2000)
+                 
                 }
                 else if(payType === 2){
                     this.payType=2;
                     this.$message.warning("支付链接加载中....")
                     setTimeout(()=>{
                         this.payType=3;
-                        qrcode.toDataURL('https://135editor.cdn.bcebos.com/files/users/541/5419088/202107/XQELeLtx_dMtL.jpg')
+                        qrcode.toDataURL('https://bcn.135editor.com/files/users/541/5419088/202112/62xGK52Q_TrSp.png')
                             .then(url => {//将url赋值给img弹框
                                 this.payImg = url;
                                 this.showWeChat=true;
@@ -120,7 +121,6 @@
                             })
                         this.showWeChat = true;
                     },2000)
-
 
                     // this.axios.post('/pay',{
                     //     orderId:this.orderId,
@@ -149,11 +149,11 @@
                 }
             },
             getOrderDetail(){
-                // this.axios.get(`/orders/${this.orderNo}`).then((res)=>{
-                //   this.orderList=res.orderItemVoList;
-                //   this.payTotal=res.payment;
-                //   this.orderAddress=res.shippingVo;
-                // })
+                this.yhRequest.get(`/api/order/getOrder/fromLast/${this.orderNo}`).then((res)=>{
+                  this.orderList=res.orderDetails
+                  this.orderAddress = res.addressDetail
+                  this.payTotal = res.realAmount
+                })
             },
             closeWeChat(){
                 this.showWeChat=false;
@@ -164,6 +164,7 @@
             },
             displayPayModal(){
                 this.showPayModal=false
+                this.$router.push('/order/list')
             }
         }
 
@@ -171,6 +172,7 @@
 </script>
 
 <style lang="scss" scope>
+@import '../assets/scss/config.scss';
 .orderPay{
     display: inline-block;
    .payBody{
@@ -200,7 +202,7 @@
                p{
                    margin-top: 10px;
                    span{
-                       color: #FF6600;
+                       color: $colorA;
                    }
                }
 
@@ -224,7 +226,7 @@
                span{
                    font-size: 24px;
                    font-weight: bold;
-                   color: #FF6600;
+                   color: $colorA;
                }
            }
        }
@@ -269,11 +271,25 @@
                justify-content: flex-start;
                align-items: center;
                margin-bottom: 15px;
-
+               flex-wrap: wrap;
                .orderList {
                    display: flex;
                    align-items: center;
-
+                   justify-content: space-between;
+                   margin: 10px 0 0 60px ;
+                   .title {
+                       p {
+                           span {
+                                font-weight: normal;
+                                color: #999;
+                                display: inline-block;
+                                width: 500px;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                           }
+                       }
+                   }
                    img {
                        width: 46px;
                        height: 38px;
@@ -286,7 +302,7 @@
                margin-bottom: 20px;
 
                span {
-                   color: #FF6600;
+                   color: $colorA;
                    font-weight: bold;
                }
 
@@ -323,7 +339,7 @@
                 border: 1px solid #e5e5e5;
                 margin-right: 10px;
                 &.checked{
-                    border:1px solid #FF6600;
+                    border:1px solid $colorA;
                 }
                 img{
                     width: 103px;

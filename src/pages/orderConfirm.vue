@@ -64,6 +64,11 @@
                         <p>应付总额：<span>{{lastPrice}}元</span></p>
                     </div>
                 </div>
+                <div>
+                    <input type="radio" v-model="usePoint" >
+                    您当前有0积分可用，是否使用积分付款
+                    
+                </div>
             </div>
             <div class="addressFooter">
                 <button @click="goToCart">返回购物车</button>
@@ -148,7 +153,8 @@
               showAdd:false,       //展示添加收货地址模态框
               showDelete:false,    //展示删除收获地址模态框
               selectedAddress:0,   //表示当前选中的地址,
-              lastPrice: 0         //最终需要付款的价格
+              lastPrice: 0,        //最终需要付款的价格,
+              usePoint: 0          //是否使用积分
           }
         },
         mounted(){
@@ -266,7 +272,8 @@
                         this.selectedAddress = defaultAddress
                     } else {
                         this.selectedAddress = 0
-                    }    
+                    }
+                    console.log(this.addressList)    
               })
             },  
             //获取购物车所有选中商品的列表
@@ -302,22 +309,32 @@
             },
             //跳转界面去支付界面
             goPay(){
-                // let item = this.addressList[this.selectedAddress];
-                // if(!item){
-                //     this.$message.error("请选择一个收获地址")
-                //     return
-                // }
-                // this.axios.post('/orders',{
-                //     shippingId:item.id
-                // }).then((res)=>{
-                //     this.$router.push({
-                //         path:'/order/pay',
-                //         query:{
-                //             orderNo:res.orderNo,
-                //         }
-                //     })
-                // })
-                this.$router.push('/order/pay')
+                let item = this.addressList[this.selectedAddress];
+                if(!item){
+                    this.$message.error("请选择一个收获地址")
+                    return
+                }
+                this.yhRequest.post('/api/order/setOrder/fromShopping',{
+                    userId: this.$store.state.user.userId,
+                    userPoint: this.usePoint,
+                    addressId: item.addressId
+                }).then((res)=>{
+                    // this.$router.push({
+                    //     path:'/order/pay',
+                    //     query:{
+                    //         orderNo:res.orderNo,
+                    //     }
+                    // })
+                    console.log(res)
+                    this.$router.push({
+                        path: '/order/pay',
+                        query: {
+                            orderNo: res
+                        }
+                    })
+                })
+                
+               
 
             },
         },
