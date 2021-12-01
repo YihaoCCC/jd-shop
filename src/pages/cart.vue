@@ -8,6 +8,13 @@
         </order-header>
         <loading v-if="loading"></loading>
         <div class="cart" v-show="!loading" >
+            <div class="safeContent nullSvg" v-if="List.length === 0">
+                <img class=" " src="../assets/imgs/loadingSvg/undraw_shopping_app_flsj.svg" alt="" >
+                <h1>购物车是空哒！快去主页加购吧</h1>
+                <button @click='BackToIndex'>去主页选购</button>
+            </div>
+            <template v-else >
+
             <div class="cart-body">
                 <ul class="cart-body-header">
                     <div class="checkbox " :class="{'checked':allCheck}" @click="selectAll"></div>
@@ -50,19 +57,24 @@
                 </ul>
 
             </div>
-            <div class="cart-footer">
+            <div class="cart-footer" >
                 <div class="footer-left">
                     <span @click="goShopping" style="cursor: pointer">继续购物</span>
                     <div style="display: inline-block;margin-left: 37px">共 <span class="num"> {{List.length}} </span> 件商品，已选择 <span class="num"> {{checkNum}} </span> 件</div>
                 </div>
                 <div class="footer-right">
-                    <p style="display: inline-block">合计：<span>{{originPrice}}</span>元</p>
+                    <div class="footer-price">
+                        <p>合计：<span>{{originPrice}}</span>元</p>
+                        <p>总计：<span>{{lastPrice}}</span>元</p>
+                    </div>
                     <button class="goPay" @click="goOrder" >
                         去结算
                     </button>
                 </div>
 
             </div>
+            </template>
+
         </div>
         <service-bar>   </service-bar>
         <Footer></Footer>
@@ -102,7 +114,7 @@ export default {
     mounted() {
         setTimeout(() => {
             this.getCartList()
-        },1000)
+        },500)
     },
     computed: {
         itemTotalPrice() {
@@ -229,6 +241,9 @@ export default {
                 else {
                     this.$router.push('/order/confirm')
                 }
+            },
+            BackToIndex() {
+                this.$router.push('/')
             }
     }
 }
@@ -244,6 +259,60 @@ export default {
         box-sizing: border-box;
         background-color: #f5f5f5;
         padding-bottom:30px;
+        text-align: center;
+        .nullSvg {
+            img {
+                height: 400px;
+                margin: 30px;
+            }
+            button {
+                    margin-top: 30px;
+                    font-size: 18px;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    display: inline-block;
+                    text-align: center;
+                    font-weight: bold;
+                    padding: 0.7em 2em;
+                    border: 3px solid #FF0072;
+                    border-radius: 2px;
+                    position: relative;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.1);
+                    color: #FF0072;
+                    text-decoration: none;
+                    transition: 0.3s ease all;
+                    z-index: 1;
+                }
+
+                button:before {
+                    transition: 0.5s all ease;
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    right: 50%;
+                    bottom: 0;
+                    opacity: 0;
+                    content: '';
+                    background-color: #FF0072;
+                    z-index: -1;
+                }
+
+                button:hover, button:focus {
+                    color: white;
+                }
+
+                button:hover:before, button:focus:before {
+                    transition: 0.5s all ease;
+                    left: 0;
+                    right: 0;
+                    opacity: 1;
+                }
+
+                button:active {
+                    transform: scale(0.9);
+                }
+           
+        }
         .cart-body{
             width: 1226px;
             box-sizing: border-box;
@@ -402,10 +471,22 @@ export default {
             }
             .footer-right{
                 color: $colorA;
-
-                span {
-                    font-weight: bold;
-                    font-size: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .footer-price {
+                    span {
+                        font-weight: bold;
+                        font-size: 20px;
+                    }
+                    p {
+                        &:first-child {
+                            span {
+                                font-size: 14px;
+                                text-decoration: line-through;
+                            }
+                        }
+                    }
                 }
                 .goPay{
                     width: 202px;

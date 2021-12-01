@@ -40,7 +40,7 @@ import OrderHeader from '../components/OrderHeader.vue'
             if( val.fullPath === '/order/Pay' ) {
                 this.title = '订单支付'
                 this.message = '请在30分钟内完成付款，注意付款时间'
-            } else if(val.fullPath === '/order/List'){
+            } else if(val.fullPath === '/order/list'){
                 this.title = '订单列表'
                 this.message = '这里显示了您的所有订单'
             }

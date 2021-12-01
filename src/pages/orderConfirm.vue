@@ -38,13 +38,13 @@
                 </div>
             </div>
             <h2>商品</h2>
-            <div class="payingList" v-for="(item,index) in cartSelectedList" :key="index">
-                <img v-lazy="item.productMainImage" alt="">
-                <div class="nameDetail">
-                    <p>{{item.productName}}</p><span>3200万4800万前后双摄旗舰手机</span>
+            <div class="payingList" v-for="(item,index) in cartSelectedList" :key="index" :title="item.goodsName+' 型号：'+item.goodsVersionDetail">
+                <img :src="item.versionPhotoUrl" alt="">
+                <div class="nameDetail" >
+                    <p>{{item.goodsName}}</p><span>{{item.goodsVersionDetail}}</span>
                 </div>
                 <div>
-                    {{item.productPrice}} X {{item.quantity}}
+                    {{item.price}} X {{item.num}}
                 </div>
                 <div class="total">
                     {{item.productTotalPrice}}
@@ -59,9 +59,9 @@
                     <div class="summary-box">
                         <p>商品件数：<span>{{num}}件</span></p>
                         <p>商品总价：<span>{{totalPrice}}元</span></p>
-                        <p>优惠活动：<span>0元</span></p>
+                        <p>优惠活动：<span>{{promotionPrice}}元</span></p>
                         <p>运费：<span>0元</span></p>
-                        <p>应付总额：<span>{{totalPrice}}元</span></p>
+                        <p>应付总额：<span>{{lastPrice}}元</span></p>
                     </div>
                 </div>
             </div>
@@ -134,9 +134,6 @@
     import testPhone from '../utils/testPhone'
     export default {
         components: {Modal},
-        component:{
-          Modal
-        },
         name: "orderConfirm",
         data(){
           return{
@@ -151,12 +148,17 @@
               showAdd:false,       //展示添加收货地址模态框
               showDelete:false,    //展示删除收获地址模态框
               selectedAddress:0,   //表示当前选中的地址,
-              
+              lastPrice: 0         //最终需要付款的价格
           }
         },
         mounted(){
             this.getAdress();
-            // this.getSelectedList();
+            this.getCartList();
+        },
+        computed: {
+            promotionPrice() {
+                return this.totalPrice - this.lastPrice
+            }
         },
         methods:{
             openEdit(item){
@@ -266,8 +268,24 @@
                         this.selectedAddress = 0
                     }    
               })
-            },
+            },  
             //获取购物车所有选中商品的列表
+            getCartList() {
+                this.yhRequest.get(`/api/shoppingCart/queryByUserId/${this.$store.state.user.userId}`).then((res)=>{
+                   this.randerData(res)
+                   this.loading = false
+                })
+            },
+            //渲染数据函数
+            randerData(res){
+                this.cartSelectedList = res.goodsList.filter((i) => {
+                    return i.isChose === 1
+                })
+                this.totalPrice = res.oriTotal
+                this.lastPrice  = res.total
+                // this.originPrice = res.oriTotal
+                // this.lastPrice = res.total
+            },
             getSelectedList(){
               this.axios.get('/carts').then((res)=>{
                 let list = res.cartProductVoList;//获取所有数据，下一步进行筛选
@@ -311,4 +329,5 @@
 <style lang="scss">
     @import '../assets/scss/config.scss';
     @import '../assets/scss/orderComfirm.scss'
+    // 此页面的css样式抽离至sass文件中
 </style>
