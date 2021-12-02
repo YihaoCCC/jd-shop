@@ -48,6 +48,9 @@
     padding: 5px 0;
     box-sizing: border-box;
     border-bottom: 2px solid $colorA;
+    position: sticky;
+    top: 0;
+    z-index: 5;
     .safeContent {
         display: flex;
         align-items: center;

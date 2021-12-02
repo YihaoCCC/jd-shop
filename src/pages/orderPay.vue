@@ -9,7 +9,7 @@
                 <div class="header-content">
                     <h2>订单创建成功！快去付款吧~~~~~</h2>
                     <p>请在<span>30分钟内</span>完成支付，超时将会消订单</p>
-                    <p>收获信息：  {{orderAddress}} </p>
+                    <p>收获信息：  {{orderAddress.province}} {{orderAddress.city}} {{orderAddress.area}} {{orderAddress.addressDetail}} </p>
                 </div>
                 <div class="details">
                     <p>应付金额：<span>{{payTotal}}</span>元</p>
@@ -24,17 +24,17 @@
             <transition name="bounce">
                 <div class="payContent" v-show="showDetail">
                     <p>订单号：<span>{{orderNo}}</span></p>
-                    <p>收货信息：  {{orderAddress}} </p>
+                    <p>收货信息： {{orderAddress.province}} {{orderAddress.city}} {{orderAddress.area}} {{orderAddress.addressDetail}} </p>
                 <div class="list">
-                    <p style="display: block;width:500px;margin:0">商品详情：</p>
+                    <p style="display: block;width:500px;margin:0">商品详情：<em style="font-size:12px;color:#999">鼠标移动至商品上查看具体型号</em></p>
                     <div class="orderList" v-for="(item,index) in orderList" :key="index" :title="item.goodsName+' 型号：'+item.goodsVersionDetail">
                         <img :src="item.versionPhotoUrl" alt="">
                         <div class="title">
                             <p style="margin-bottom: 10px" ><span>{{item.goodsName}}</span> <em style="color: #E1251B;font-weight: bold"> X </em> {{item.number}}</p>
 
                         </div>
-                        <div style="line-height:38px">
-                            {{item.realPrice}}
+                        <div style="line-height:30px;">
+                           总计：<span style="color:#e1251b">{{item.realPrice}}</span> 
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                 if (payType === 1){
                     this.payType=1;
                         // window.open('/#/order/alipay?orderNo='+this.orderNo,"_blank");
-                        this.$message.error("支付宝功能暂不支持，请联系管理员重试......")
+                        this.$message.error("支付宝支付暂不支持，请联系管理员重试......")
                         this.payType=3;
                  
                 }
@@ -151,8 +151,9 @@
             getOrderDetail(){
                 this.yhRequest.get(`/api/order/getOrder/fromLast/${this.orderNo}`).then((res)=>{
                   this.orderList=res.orderDetails
-                  this.orderAddress = res.addressDetail
+                  this.orderAddress = res.address
                   this.payTotal = res.realAmount
+                  
                 })
             },
             closeWeChat(){
@@ -160,7 +161,15 @@
                 this.showPayModal=true;
             },
             goToList(){
-                this.$router.push('/order/list')
+                this.yhRequest.get(`/api/order/payTheOrder/${this.$route.query.orderNo}`).then((res) => {
+                    if(res) 
+                    {
+                             this.$router.push('/order/list')
+                    }
+                     else {
+                         this.$message.error('支付失败！请稍后重试！')
+                     }
+                }) 
             },
             displayPayModal(){
                 this.showPayModal=false
@@ -231,7 +240,7 @@
            }
        }
        .payContent {
-           padding: 40px 186px 20px;
+           padding: 40px 160px 20px;
            font-size: 14px;
            color: #666666;
            transition: all .8s;
@@ -278,17 +287,21 @@
                    justify-content: space-between;
                    margin: 10px 0 0 60px ;
                    .title {
+                       border-right: 1px solid #e5e5e5;
+                       margin-right: 10px;
                        p {
+                           padding: 0 10px;
+                           box-sizing: border-box;
                            span {
                                 font-weight: normal;
-                                color: #999;
+                                color: #666;
                                 display: inline-block;
                                 width: 500px;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
                            }
-                       }
+                       }                      
                    }
                    img {
                        width: 46px;
