@@ -64,9 +64,9 @@
                         <p>应付总额：<span>{{lastPrice}}元</span></p>
                     </div>
                 </div>
-                <div>
-                    <input type="radio" v-model="usePoint" >
-                    您当前有0积分可用，是否使用积分付款
+                <div v-if="isShowUsePoint" >
+                    <input type="radio" :value="usePoint"  :checked='usePoint' @click="usePointPay" >
+                    您当前有 <span style="color: #e1251b;font-weight: bloder;font-size:16px">{{this.$store.state.user.points}}</span>    积分可用，是否使用积分付款
                     
                 </div>
             </div>
@@ -154,7 +154,8 @@
               showDelete:false,    //展示删除收获地址模态框
               selectedAddress:0,   //表示当前选中的地址,
               lastPrice: 0,        //最终需要付款的价格,
-              usePoint: 0          //是否使用积分
+              usePoint: 0,         //是否使用积分,
+              isShowUsePoint: false
           }
         },
         mounted(){
@@ -290,6 +291,13 @@
                 })
                 this.totalPrice = res.oriTotal
                 this.lastPrice  = res.total
+                 // 是否显示积分
+                if(this.$store.state.user.points > this.totalPrice*3) {
+                    this.isShowUsePoint = true
+                   
+                } else {
+                    this.isShowUsePoint =  false
+                }
                 // this.originPrice = res.oriTotal
                 // this.lastPrice = res.total
             },
@@ -316,7 +324,7 @@
                 }
                 this.yhRequest.post('/api/order/setOrder/fromShopping',{
                     userId: this.$store.state.user.userId,
-                    userPoint: this.usePoint,
+                    usePoint: this.usePoint,
                     addressId: item.addressId
                 }).then((res)=>{
                     // this.$router.push({
@@ -326,6 +334,7 @@
                     //     }
                     // })
                     console.log(res)
+                    this.GetAndRefreshUserInfo() // 生成订单后 刷新用户信息 同步积分
                     this.$router.push({
                         path: '/order/pay',
                         query: {
@@ -337,6 +346,11 @@
                
 
             },
+            // 使用积分付款
+            usePointPay() {
+                this.usePoint = this.usePoint===1 ? 0 : 1
+                console.log('现在值'+this.usePoint) 
+            }
         },
         
 

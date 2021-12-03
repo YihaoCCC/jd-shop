@@ -34,7 +34,7 @@
 
                         </div>
                         <div style="line-height:30px;">
-                           总计：<span style="color:#e1251b">{{item.realPrice}}</span> 
+                           总计：<span style="color:#e1251b">{{item.realPrice*item.number}}</span> 
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,9 @@
                 this.yhRequest.get(`/api/order/payTheOrder/${this.$route.query.orderNo}`).then((res) => {
                     if(res) 
                     {
-                             this.$router.push('/order/list')
+                            this.GetAndRefreshUserInfo() //支付后刷新用户信息
+                            this.$router.push('/order/list')
+                            this.$message.success('付款成功！')
                     }
                      else {
                          this.$message.error('支付失败！请稍后重试！')
@@ -174,7 +176,13 @@
             displayPayModal(){
                 this.showPayModal=false
                 this.$router.push('/order/list')
-            }
+            },
+            // 只要用户生成订单，就重新进行user刷新，保证user的积分同步
+            getUser(){
+                this.yhRequest.get(`/api/user/${this.$cookie.get('userId')}`).then((res)=>{
+                    this.$store.dispatch('saveUser',res)
+                })
+            },
         }
 
     }

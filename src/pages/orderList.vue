@@ -13,7 +13,7 @@
                 </div>
                 <div class="ItemContent" >
                     <div class="rightContent" >
-                        <div class="ItemList" v-for="jtem in item.orderDetails" :key="jtem.goodsId">
+                        <div class="ItemList" v-for="jtem in item.orderDetails" :key="jtem.goodsVersionId">
                             <img :src="jtem.versionPhotoUrl" alt="">
                             <div class="nameInfo">
                                 <p>{{jtem.goodsName}}</p>
@@ -25,18 +25,18 @@
                             </div>
                             <div class="price">
                                 <em v-if='jtem.oriPrice !== jtem.realPrice'>单价：{{jtem.oriPrice}}</em>
-                                <p><span style="color:#666">{{ jtem.oriPrice !== jtem.realPrice ? '实付：' : '单价：'}}</span>{{jtem.realPrice}}</p>
+                                <p><span style="color:#666">{{ jtem.oriPrice !== jtem.realPrice ? '实付：' : '单价：'}}</span>{{jtem.realPrice*jtem.number}}</p>
                             </div>
                         </div>
                     </div>
                     <div class="leftContent">
                         <div class="totalPrice">
-                            总价<span style="color:#e1251b">{{item.realAmount}}</span>
+                            总计<span style="color:#e1251b">{{item.realAmount}}</span>
                         </div>
                         <div class="address">
                             <p style="font-size: 20px">{{item.address.name}}</p>
                             <p>{{item.address.phone}}</p>
-                            <p>{{item.address.province}}{{item.address.city}}{{item.address.area}}{{item.address.addressDetail}}</p>
+                            <p style="color:#777">{{item.address.province}}{{item.address.city}}{{item.address.area}}{{item.address.addressDetail}}</p>
                         </div>
                         <div class="GoPay">
                             <button v-if="item.orderStatus === '待付款'"  @click="GoPay(item.orderId)">
@@ -53,9 +53,11 @@
                             <div v-else class="success">{{item.orderStatus}}</div>
                         </div>
                     </div>
-                    <div class="orderStatus">
+                    <div class="orderStatus" v-if="item.orderStatus === '待付款'">
                     <!-- 实现印章效果 -->
-
+                        <li @click="CancelOrder(item.orderId)">
+                            取消订单
+                        </li>
                     </div>
                 </div>
             </div>
@@ -112,16 +114,28 @@
                 <span>已完成</span>
             </button>
         </div>
+        <model
+            content="您是否要删除此订单"
+            SureText="确认删除该订单"
+            CancelText='我再想想'
+            @SureClick='SureCancel'
+            @CancelClick='cancel'
+            :IsShow="ShowCancelOrderModel"
+        >
+
+        </model>
     </div>
 </template>
 
 <script>
 import Loading from '@/components/Loading'
 import EndData from '@/components/EndData'
+import Model from '../components/Model.vue'
 export default {
     components: {
         Loading,
-        EndData
+        EndData,
+        Model
     },
     data() {
         return {
@@ -131,8 +145,9 @@ export default {
             isEnd: false,
             orderListElement: '',
             pageNum: 1,
-            listLenght: 4,            
+            orderNo: ' ',        // orderNo数据中转站            
             status: '全部',      // 订单状态：全部订单，未完成订单，已完成，代发货
+            ShowCancelOrderModel: false
         }
     },
     mounted() {
@@ -178,7 +193,7 @@ export default {
             this.isEnd = false   // 每次点击也需要重置isEnd 让其进入 滚动事件监听
             this.yhRequest.get(`/api/order/queryAll/${this.$store.state.user.userId}/${this.pageNum}/${this.status}`).then((res) => {
                 console.log(res)
-                console.log('当前状态：'+this.status)
+                console.log('当前筛选类型：'+this.status)
                 this.orderList  = res
             })
         },
@@ -189,6 +204,27 @@ export default {
                     orderNo:orderNo
                 }
             })
+        },
+        CancelOrder(orderNo) {
+            this.ShowCancelOrderModel = true
+            this.orderNo = orderNo
+            console.log(orderNo)
+        },
+        SureCancel() {
+            this.yhRequest.delete(`/api/order/deleteNotPayOrder/${this.orderNo}`).then ((res) => {
+                if(res) {
+                    this.ShowCancelOrderModel =false,
+                    this.pageNum = 1
+                    this.GetAndRefreshUserInfo()
+                    this.$message.success('删除订单成功！')
+                    history.go(0)
+                } else {
+                    this.$message.error('删除失败，请联系管理员重试！')
+                }
+            })
+        },
+        cancel() {
+            this.ShowCancelOrderModel = false
         }
     }
 }
@@ -198,6 +234,7 @@ export default {
 <style scoped lang='scss'>
 .OrderList {
     position: relative;
+    min-height: 600px;
     .OrderItem {
         width: 100%;
         background-color: #fff;
@@ -300,10 +337,23 @@ export default {
             }
             .orderStatus {
                 position: absolute;
-                top: 10px;
-                right: 30px;
+                top: 5px;
+                right: 25px;
                 font-size: 20px;
                 color: #666;
+                li {
+                    cursor: pointer;
+                    font-size: 16px;
+                    color: #e1251b;
+                    background-color: #fff;
+                    padding: 10px 24px;
+                    border-radius: 20px;
+                    transition: all 0.5s;
+                    border: 1px solid #fff;
+                    &:hover {
+                        border: 1px solid #e1251b;
+                    }
+                }
 
             }
         }
@@ -391,7 +441,7 @@ export default {
         img {
             width: 400px;
             height: 300px;
-            margin: 30px 0 ;
+            margin: 80px 0 ;
         }
     }
 }

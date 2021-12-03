@@ -185,6 +185,7 @@ export default {
                         background-color: #e5e5E1;
                         border-bottom-left-radius: 20px;
                         border-bottom-right-radius: 20px;
+                        z-index: 100;
                         p {
                             border-bottom: 1px solid #999;
                             color: #666;

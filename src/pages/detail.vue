@@ -2,7 +2,8 @@
     <div>
         <detail-header :title="detail.goodsName">
             <template v-slot:buy>
-                <button @click="GoOrderConfrim">立即购买</button>
+                <button @click="GoOrderConfrim">继续购物
+                </button>
             </template>
         </detail-header>
         <div class="detailContent">
@@ -39,7 +40,12 @@
                         </div>
                         <h2 style="margin:20px 0 0 0">选择版本</h2>
                         <div class="version">
-                            <div class="version-box" v-for="(item,index) in versionDetail" :key=index @click="choose(item,index)" :class="{'version-shadow':version==index}" >
+                            <div class="version-box" 
+                                    v-for="(item,index) in versionDetail" 
+                                    :key=index @click="choose(item,index)" 
+                                    :class="{'version-shadow':version==index}"
+                                    :title="item.goodsVersionDetail"
+                                 >
                                 <span>{{item.goodsVersionDetail}}</span> 
                             </div>
                         
@@ -54,7 +60,11 @@
                             <span style="">{{detail.name}}</span>
                             <div v-if="choosedItem.length===0">请选择商品属性</div>
                             <div v-else class="total-version-money">
-                            <div class="choose-version-color" v-for="(item,index) in versionDetail" :key=index :style="version!==index?'display:none':''" >
+                            <div class="choose-version-color" 
+                                 v-for="(item,index) in versionDetail" 
+                                 :key=index 
+                                 :style="version!==index?'display:none':''" 
+                                 >
                                 {{version === index ? item.goodsVersionDetail:''}}
                             </div>
                             <p>总计: {{this.choosedItem.goodsPrice}} 元</p>
@@ -210,11 +220,7 @@ export default {
         },
         GoOrderConfrim() {
             if(this.userName) {
-                if(this.isChoose) {
-                    this.$router.push('/order/confirm')
-                } else {
-                    this.$message.error('请选择商品属性')
-                }
+               this.$router.push('/')
             } else {
                 this.$store.dispatch('changeIsShow' ,true)
             }

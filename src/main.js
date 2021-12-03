@@ -32,6 +32,12 @@ Vue.prototype.$message = Message
 Vue.prototype.GoLogin = function() {
     router.push('/login')
 }
+Vue.prototype.GetAndRefreshUserInfo = function() {
+  this.yhRequest.get(`/api/user/${this.$cookie.get('userId')}`).then((res)=>{
+    this.$store.dispatch('saveUser',res)
+  })
+  console.log('刷新用户信息')
+}
 
 new Vue({
   router,

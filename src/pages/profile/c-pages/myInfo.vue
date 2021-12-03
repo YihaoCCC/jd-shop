@@ -103,9 +103,11 @@ export default {
       };
     },
     methods: {
+        // 选择并改变标签
         changeFlag () {
             this.flag  === 2 ? this.flag=1 :this.flag= 2
         },
+        // 提交修改
         submitForm() {
             if(this.userInfo.pass) {
                 if(this.oldPass === this.user.pswd) {
@@ -143,7 +145,8 @@ export default {
         //     return false;
         //   }
         // });
-      },
+        },
+        // 修改昵称
       changeName() {
           if(this.nickName) {
               this.yhRequest.get(`/api/user/modifyName/${this.$store.state.user.userId}&${this.nickName}`).then((res) => {
@@ -160,9 +163,11 @@ export default {
           }
           
       },
+      // 重置表格
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
+      // 判断密码是否相同
       judgeOld() {
          if( this.oldPass !== this.user.pswd ) {
              this.$message.error('新密码必须与旧密码相同！')
@@ -236,6 +241,7 @@ export default {
                 z-index: 1;
                 span {
                     color: #999;
+                    transition: all 0.5s;
                 }
                 h2 {
                     color: #e0e0e0;
@@ -261,9 +267,17 @@ export default {
                     color: #666;
                     span {
                         color: #e0e0e0;
+                        &:active {
+                            color: rgb(240, 184, 170);
+                        }
                     }
                     h2 {
                          color: #666;
+                    }
+                }
+                &:active {
+                    span {
+                        color: rgb(240, 184, 170);
                     }
                 }
                 &:active:before {
