@@ -62,12 +62,12 @@
         </template>
         <div class="NoData" v-else>
             <img src="../assets/imgs/loadingSvg/order-null.svg" alt="">
-            <h2>暂时未查询到您的订单数据</h2>
+            <h2>暂时未查询到您的<span style="color:#E1251B">{{this.status}}</span>订单数据</h2>
         </div>
         <loading v-show="isLoading" ></loading>
         <end-data v-show="isEnd"></end-data>
-        <div v-if="orderList.length" class="rightButtons">
-            <button  :class="{'active' : type === 1}" @click="fliterOrderList(1)">
+        <div class="rightButtons">
+            <button  :class="{'active' : status === '全部'}" @click="fliterOrderList('全部')">
                 <div class="svg-wrapper-1">
                     <div class="svg-wrapper ">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -78,7 +78,7 @@
                 </div>
                 <span>全部</span>
             </button>
-            <button  :class="type === 2 ? 'active': '' "  @click="fliterOrderList(2)">
+            <button  :class="status === '待付款' ? 'active': '' "  @click="fliterOrderList('待付款')">
                 <div class="svg-wrapper-1">
                     <div class="svg-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -89,7 +89,18 @@
                 </div>
                 <span>待付款</span>
             </button>
-            <button :class="type===3 ? 'active' : '' " @click="fliterOrderList(3)">
+            <button :class="status === '待发货' ? 'active' : '' " @click="fliterOrderList('待发货')">
+                <div class="svg-wrapper-1">
+                    <div class="svg-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="none" d="M0 0h24v24H0z"></path>
+                        <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                    </svg>
+                    </div>
+                </div>
+                <span>待发货</span>
+            </button>
+             <button :class="status === '已完成' ? 'active' : '' " @click="fliterOrderList('已完成')">
                 <div class="svg-wrapper-1">
                     <div class="svg-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -120,9 +131,8 @@ export default {
             isEnd: false,
             orderListElement: '',
             pageNum: 1,
-            listLenght: 4,
-            type: 1,             // 订单类型，1代表全部订单，2代表未完成订单，3代表已完成订单
-            status: '全部'
+            listLenght: 4,            
+            status: '全部',      // 订单状态：全部订单，未完成订单，已完成，代发货
         }
     },
     mounted() {
@@ -149,16 +159,28 @@ export default {
 
                     console.log('请求数据')
                     setTimeout(() => {
-                    this.listLenght = this.listLenght + 2
-                    this.isLoading = false
-                    if(this.listLenght >= 8) { //没有数据时，设置isEnd为True，永远不会进入请求
-                        this.isEnd = true
-                    }
+                        this.pageNum ++ // pageNum先增加1，然后再去请求数据
+                        this.yhRequest.get(`/api/order/queryAll/${this.$store.state.user.userId}/${this.pageNum}/${this.status}`).then((res) => {
+                            console.log(res)
+                            console.log('当前状态：'+this.status)
+                            this.orderList.push(...res)
+                            if(res.length === 0) { //没有数据时，设置isEnd为True，永远不会进入请求
+                                this.isEnd = true
+                            }
+                            this.isLoading = false
+                        })
                 },1000)
             }
         },
         fliterOrderList(type) {
-            this.type = type  
+            this.status = type
+            this.pageNum = 1     // 每点击一次需要重置pageNum
+            this.isEnd = false   // 每次点击也需要重置isEnd 让其进入 滚动事件监听
+            this.yhRequest.get(`/api/order/queryAll/${this.$store.state.user.userId}/${this.pageNum}/${this.status}`).then((res) => {
+                console.log(res)
+                console.log('当前状态：'+this.status)
+                this.orderList  = res
+            })
         },
         GoPay(orderNo) {
             this.$router.push({
@@ -270,7 +292,9 @@ export default {
                         margin: 0;
                     }
                     .success {
-                        color: #998;
+                        color: #9A0;
+                        font-size: 20px;
+                        font-weight: bolder;
                     }
                 }
             }
