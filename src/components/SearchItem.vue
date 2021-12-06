@@ -32,25 +32,15 @@
                     <span>加入购物车</span>
                 </div>
             </div>
-        </div>
-        <model
-            :IsShow="isShowCollect"
-            :btnType="1"
-            content="添加收藏夹成功！"
-            SureText="查看我的收藏夹"
-            @CancelClick='cancel()'
-            @SureClick='GoCollect()'
-        >
-
-        </model>
+        </div>  
     </div>
 </template>
 <script>
-import Model from '@/components/Model'
+// import Model from '@/components/Model' //改用全局组件
 export default {
-    components: {
-        Model
-    },
+    // components: {
+    //     Model
+    // },
     props: { 
         detail: {
             type: Object,
@@ -99,19 +89,14 @@ export default {
                 }).then((res) => {
                     if(res) {
                         this.isShowCollect = true
+                        this.$parent.CollectSuccess()
                     } else {
                         this.$message.info('该商品已在收藏夹啦！')
                     }
-                })
+                }) 
             } else {
                 this.$store.dispatch('changeIsShow', true)
             }     
-        },
-        GoCollect() {
-            this.$router.push('/collect') 
-        },
-        cancel() {
-            this.isShowCollect = false
         }
     }
 }

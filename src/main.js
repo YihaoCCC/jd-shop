@@ -9,6 +9,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 import yhRequest from './service';
 import store from './store'
 
+// 注册Vue全局组件，
+import Model from '@/components/Model'
+Vue.component('Model', Model)
+
 
 Vue.config.productionTip = false
 

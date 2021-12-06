@@ -24,6 +24,16 @@
                 <end-data v-else></end-data>
             </div>
         </template>
+        <model
+            :IsShow="isShowCollect"
+            :btnType="1"
+            content="添加收藏夹成功！"
+            SureText="查看我的收藏夹"
+            @CancelClick='cancel()'
+            @SureClick='GoCollect()'
+        >
+
+        </model>
     </div>
 </template>
 <script>
@@ -71,7 +81,9 @@ export default {
                 '拍卖',
                 '我的金融'
             ],
-            SearchGoodsList: []
+            SearchGoodsList: [],
+            isShowCollect: false,
+            isShowCart: false
         }
     },
     methods: {
@@ -88,6 +100,15 @@ export default {
                     this.Loading = false
                 },500)
             })
+        },
+        CollectSuccess() {
+            this.isShowCollect  = true
+        },
+        GoCollect() {
+            this.$router.push('/collect') 
+        },
+        cancel() {
+            this.isShowCollect = false
         }
     }
 }

@@ -130,12 +130,11 @@
 <script>
 import Loading from '@/components/Loading'
 import EndData from '@/components/EndData'
-import Model from '../components/Model.vue'
+// import Model from '../components/Model.vue' // 改用全局组件
 export default {
     components: {
         Loading,
-        EndData,
-        Model
+        EndData
     },
     data() {
         return {
@@ -154,6 +153,9 @@ export default {
         window.addEventListener('scroll', this.getOrderList)
         this.orderListElement = document.getElementsByClassName('OrderList')[0]
         this.getFirstData()
+    },
+    destroyed() {
+        window.CloseEvent()
     },
     methods: {
         getFirstData() {

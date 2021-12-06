@@ -109,13 +109,12 @@
 </template>
 <script>
 import DetailHeader from '../components/DetailHeader.vue'
-import Model from '../components/Model.vue'
+// import Model from '../components/Model.vue' // 改用全局组件
 import Comment from '@/components/Comment'
 export default {
     components: {
         DetailHeader,
-        Comment,
-        Model
+        Comment
     },
     mounted() {
         this.getGoodsDetail()

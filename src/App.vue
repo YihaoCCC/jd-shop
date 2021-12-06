@@ -15,13 +15,14 @@
 </template>
 
 <script>
-import Model from './components/Model';
+// import Model from './components/Model'; // 改用全局组件
 import {mapState} from 'vuex'
 export default {
   name: 'App',
-  components: {
-    Model
-  },
+  // components: {
+  //   Model
+  // }, // 改用全局组件
+  
   // 全局的计算属性 用来判断是否登录
   computed: {
       GetUserName: {
@@ -35,6 +36,7 @@ export default {
      if(this.$cookie.get('userId')){
       this.getUser(this.$cookie.get('userId'));
     }
+    console.log(this)
   },
   methods: {
     getUser(id){

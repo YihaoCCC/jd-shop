@@ -42,12 +42,12 @@
     </div>
 </template>
 <script>
-import Model from './Model.vue'
+// import Model from './Model.vue' //改用全局组件
 
 export default {
-    components: {
-        Model 
-    },
+    // components: {
+    //     Model 
+    // },
     data() {
       
         return {

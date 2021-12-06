@@ -75,7 +75,7 @@
                 <button class="goPay" @click="goPay"> 去结算</button>
             </div>
         </div>
-        <modal
+        <model
                 title="删除地址"
                 :IsShow="showDelete"
                 sure-text="删除"
@@ -86,8 +86,8 @@
             <template v-slot:body>
                 <p>您确定要删除地址吗？</p>
             </template>
-        </modal>
-        <modal
+        </model>
+        <model
             title="添加（修改）新地址"
             :IsShow="showAdd"
             sure-text="确认收获地址"
@@ -130,15 +130,15 @@
                     </div>
                 </div>
             </template>
-        </modal>
+        </model>
     </div>
 </template>
 
 <script>
-    import Modal from "@/components/Model";
+    // import Modal from "@/components/Model"; //  改用全局组件
     import testPhone from '../utils/testPhone'
     export default {
-        components: {Modal},
+
         name: "orderConfirm",
         data(){
           return{

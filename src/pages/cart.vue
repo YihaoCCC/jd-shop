@@ -59,12 +59,12 @@
             </div>
             <div class="cart-footer" >
                 <div class="footer-left">
-                    <span @click="goShopping" style="cursor: pointer">继续购物</span>
+                    <span @click="goShopping" style="cursor: pointer;font-wight:bloder;color:#e1251b">继续购物</span>
                     <div style="display: inline-block;margin-left: 37px">共 <span class="num"> {{List.length}} </span> 件商品，已选择 <span class="num"> {{checkNum}} </span> 件</div>
                 </div>
                 <div class="footer-right">
                     <div class="footer-price">
-                        <p>合计：<span>{{originPrice}}</span>元</p>
+                        <p class="lineThough" v-if="originPrice !== lastPrice">合计：<span>{{originPrice}}</span>元</p>
                         <p>总计：<span>{{lastPrice}}</span>元</p>
                     </div>
                     <button class="goPay" @click="goOrder" >
@@ -94,11 +94,11 @@
 import Footer from '../components/Footer.vue'
 import HeaderBar from '../components/HeaderBar.vue'
 import Loading from '../components/Loading.vue'
-import Model from '../components/Model.vue'
+// import Model from '../components/Model.vue'  // 改用全局组件
 import OrderHeader from '../components/OrderHeader.vue'
 import ServiceBar from '../components/ServiceBar.vue'
 export default {
-  components: { HeaderBar, OrderHeader, Loading, ServiceBar,Footer, Model },
+  components: { HeaderBar, OrderHeader, Loading, ServiceBar,Footer },
     
     data() {
         return {
@@ -479,13 +479,11 @@ export default {
                         font-weight: bold;
                         font-size: 20px;
                     }
-                    p {
-                        &:first-child {
+                    .lineThough {
                             span {
                                 font-size: 14px;
                                 text-decoration: line-through;
                             }
-                        }
                     }
                 }
                 .goPay{

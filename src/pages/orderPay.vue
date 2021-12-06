@@ -55,7 +55,7 @@
             </div>
         </div>
         <we-chat-frame  :show-translate="showWeChat" @cancel="closeWeChat" :img-url="payImg"></we-chat-frame>
-        <modal
+        <model
             title="支付确认"
             SureText="我已支付"
             CancelText="未支付"
@@ -66,19 +66,19 @@
             <template v-slot:body>
                 <span>请确认您是否已经支付？</span>
             </template>
-        </modal>
+        </model>
     </div>
 </template>
 
 <script>
     import qrcode from 'qrcode';
     import WeChatFrame from "@/components/WeChatFrame";
-    import Modal from "@/components/Model";
+    // import Modal from "@/components/Model"; // 改用全局组件
     export default {
         name: "orderPay",
         components:{
-          WeChatFrame,
-            Modal
+          WeChatFrame
+
         },
         data(){
             return{
