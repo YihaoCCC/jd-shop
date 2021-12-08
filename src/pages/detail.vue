@@ -6,7 +6,8 @@
                 </button>
             </template>
         </detail-header>
-        <div class="detailContent">
+        <loading v-if="isLoading"></loading>
+        <div v-else class="detailContent" >
             <div class="safeContent content">
                 <div class="leftContent">
                     <img v-if="choosedItem.length ===0" :src="detail.photoUrl" alt="">
@@ -23,7 +24,7 @@
                                 {{detail.promotionDetail}}
                             </div>
                             <div style="margin-top:14px">
-                            <span>{{detail.goodsPrice | price}}元 </span><em style="text-decoration: line-through;margin-left:10px">2999元</em>
+                            <span v-if="choosedItem.length === 0" >{{detail.goodsPrice | price}}元 </span><span v-else >{{choosedItem.goodsPrice | price}}元 </span><em style="text-decoration: line-through;margin-left:10px">2999元</em>
                         </div>
                         </div>
                         <div class="adress">
@@ -84,9 +85,10 @@
                 <div class="commentHeader">
                     商品评价
                 </div>
-                <comment v-for="item in 4" :key="item" ></comment>
+                <comment v-for="item in commentList" :key="item.reviewId" :CommentDetail='item'></comment>
             </div>
         </div>
+        
         <model
             :IsShow="isShow"
             :btnType="1"
@@ -111,10 +113,12 @@
 import DetailHeader from '../components/DetailHeader.vue'
 // import Model from '../components/Model.vue' // 改用全局组件
 import Comment from '@/components/Comment'
+import Loading from '@/components/Loading'
 export default {
     components: {
         DetailHeader,
-        Comment
+        Comment,
+        Loading
     },
     mounted() {
         this.getGoodsDetail()
@@ -142,8 +146,10 @@ export default {
             version: 6,
             choosedItem: [],
             versionDetail: [],
+            commentList: [],
             isShow: false,
-            isShowCollect: false   
+            isShowCollect: false,   
+            isLoading: true
         }
     },
     methods: {
@@ -151,10 +157,13 @@ export default {
             this.yhRequest.get(`/api/goods/goodsDetail/${this.$route.params.id}`).then((res) => {
                 // 给当前页面的详情数据赋值
                 this.detail = res
+                //评论赋值
+                this.commentList = res.reviews
                 // 另外给版本详情赋值
                 this.versionDetail = res.goodsVersions
                 // 当前的版本号一定比版本数量大 在加入或者购买前判断是否已经选择了商品的某个版本，未选中则不允许进行下一步操作
                 this.version = this.detail.goodsVersions.length + 1
+                this.isLoading= false
             })
         },
         addCart(){

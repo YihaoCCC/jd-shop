@@ -43,6 +43,9 @@ import OrderHeader from '../components/OrderHeader.vue'
             } else if(val.fullPath === '/order/list'){
                 this.title = '订单列表'
                 this.message = '这里显示了您的所有订单'
+            } else if(val.fullPath.includes( 'order/comment')){
+                this.title = '订单评论'
+                this.message = '快来发表您对购买宝贝的评论吧！'
             }
             },
             // 深度观察监听

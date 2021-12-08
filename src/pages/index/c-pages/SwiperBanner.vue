@@ -3,23 +3,23 @@
     <nav-menu></nav-menu>
     <el-carousel class="firstSwiper" :autoplay="true" arrow="always" height="470px">
       <el-carousel-item v-for="item in swiperImg" :key="item.id">
-        <img :src="item.imgUrl" alt="" />
+        <img :src="item.imgUrl" alt="" @click="GoSearchComputer" />
       </el-carousel-item>
     </el-carousel>
    <div class="secondSwiper">
         <el-carousel  height="150px" :interval="10000"  indicator-position='none'>
             <el-carousel-item v-for="item in swiperImg2" :key="item.id">
-                  <img style="width: 190px;heigth: 150px;" :src="item.imgUrl" alt="">
+                  <img style="width: 190px;heigth: 150px;cursor:pointer" :src="item.imgUrl" alt="" @click="searchSwiper2(item.id)">
             </el-carousel-item>
         </el-carousel>
          <el-carousel  height="150px" :interval="10000"  indicator-position='none'>
             <el-carousel-item v-for="item in swiperImg3" :key="item.id">
-                  <img style="width: 190px;heigth: 150px;" :src="item.imgUrl" alt="">
+                  <img style="width: 190px;heigth: 150px;cursor:pointer" :src="item.imgUrl" alt="" @click="searchSwiper3(item.id)">
             </el-carousel-item>
         </el-carousel>
          <el-carousel  height="150px" :interval="10000" indicator-position='none'>
             <el-carousel-item v-for="item in swiperImg4" :key="item.id">
-                  <img style="width: 190px;heigth: 150px;" :src="item.imgUrl" alt="">
+                  <img style="width: 190px;heigth: 150px;cursor:pointer" :src="item.imgUrl" alt="" @click="searchSwiper4(item.id)">
             </el-carousel-item>
         </el-carousel>
    </div>
@@ -263,6 +263,29 @@ export default {
         this.$store.state.isShowGoToLogin = true 
       }
       e.preventDefault()
+    },
+    searchGoods(searchTitle) {
+      this.$router.push({
+            path: '/search',
+            query: {
+              searchGoods: searchTitle
+            }
+        })
+    },
+    GoSearchComputer() {
+      this.searchGoods('电脑')
+    },
+    searchSwiper2(typeIndex) {
+      let searchTitle = typeIndex === 1 ?  '洗衣液' : typeIndex === 2 ? '手机' :  '电脑'
+      this.searchGoods(searchTitle)
+    },
+    searchSwiper3(typeIndex) {
+       let searchTitle = typeIndex === 1 ?  '奶粉' :  '电脑'
+       this.searchGoods(searchTitle)
+    },
+    searchSwiper4(typeIndex) {
+        let searchTitle = typeIndex === 1 ?  '洗衣液' : typeIndex === 3 ? '家具' : '电脑'
+        this.searchGoods(searchTitle)
     }
   }
 };
@@ -275,6 +298,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-top: 13px;
+  cursor: pointer;
 }
 .firstSwiper {
   width: 590px;

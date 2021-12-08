@@ -45,44 +45,6 @@ export default {
 }
 </script>
 <style scoped lang='scss'>
-    .swiperSecond{
-        background: url('../../assets/imgs/bannerBg.webp') no-repeat center;
-        height: 710px;
-    }
-    //分割楼层
-   .flooerSpace {
-       height: 45px;
-       margin-top: 30px;
-       h1{
-           width: 210px;
-           margin: auto;
-           text-align: center;
-           position: relative;
-           &::before {
-                width: 25px;
-                height: 20px;
-                background-size: 50px 20px;
-                background-image: url('../../assets/imgs/floor.png');
-                background-position: 0px 0px;
-                left: 0px;
-                content: "";
-                position: absolute;
-                top: 50%;
-                margin-top: -10px;
-           }
-           &::after {
-               width: 25px;
-                height: 20px;
-                background-size: 50px 20px;
-                background-image: url('../../assets/imgs/floor.png');
-                background-position: -25px 0px;
-                right: 0px;
-                content: "";
-                position: absolute;
-                top: 50%;
-                margin-top: -10px;
-           }
-    }
-   }
-   
+    @import '../../assets/scss/index.scss';
+
 </style>

@@ -1,0 +1,68 @@
+.orderDetailList {
+    margin: 15px 0 ;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background-color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    .goodsBox {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-right: 1px solid;
+        border-image: linear-gradient(to bottom, #fff ,#999, #fff) 1;
+        padding-right: 30px;
+        img {
+            width: 150px;
+            height: 150px;
+        }
+        .title {
+            display: flex;
+            text-align: center;
+            flex-direction: column;
+            margin-left: 30px;
+            color: #666;
+            min-width: 529px;
+            p {
+                margin-bottom: 20px;
+            }
+        }
+
+    }
+    .commentContent {
+        padding: 10px 0;
+        box-sizing: border-box;
+        margin: 5px 0 0 40px;
+        width: 300px;
+        text-align: center;
+        textarea {
+            width: 280px;
+            height: 80px;
+            font-size: 16px;
+            word-break: break-all;
+            color: #666;
+            border: 1px solid;
+            border-image:  linear-gradient(to right, #e1251b, #e5e5e5) 1;
+        }
+        p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            
+        }
+        button {
+            background-image: linear-gradient(to right, #e1251b, #e5e5e5);
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            margin-top: 10px;
+            transition: all .5s;
+            &:hover {
+                transform: scale(1.1);
+            }
+            &:active {
+                transform: scale(1.02);
+            }
+        }
+    }
+}

@@ -50,7 +50,18 @@
                                 </div>
                                 <span >去付款</span>
                             </button>
-                            <div v-else class="success">{{item.orderStatus}}</div>
+                            <button v-if="item.orderStatus === '待评价'"  @click="GoComment(item.orderId)">
+                                <div class="svg-wrapper-1">
+                                    <div class="svg-wrapper ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                        <path fill="none" d="M0 0h24v24H0z"></path>
+                                        <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                                    </svg>
+                                    </div>
+                                </div>
+                                <span >去评价</span>
+                            </button>
+                            <div v-if="item.orderStatus === '待发货'" class="success">{{item.orderStatus}}</div>
                         </div>
                     </div>
                     <div class="orderStatus" v-if="item.orderStatus === '待付款'">
@@ -102,7 +113,7 @@
                 </div>
                 <span>待发货</span>
             </button>
-             <button :class="status === '已完成' ? 'active' : '' " @click="fliterOrderList('已完成')">
+             <button :class="status === '待评价' ? 'active' : '' " @click="fliterOrderList('待评价')">
                 <div class="svg-wrapper-1">
                     <div class="svg-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -154,8 +165,9 @@ export default {
         this.orderListElement = document.getElementsByClassName('OrderList')[0]
         this.getFirstData()
     },
+    // 清除监听事件，优化性能
     destroyed() {
-        window.CloseEvent()
+        window.removeEventListener('scroll', this.getOrderList)
     },
     methods: {
         getFirstData() {
@@ -204,6 +216,14 @@ export default {
                 path: '/order/pay',
                 query: {
                     orderNo:orderNo
+                }
+            })
+        },
+        GoComment(orderNo) {
+            this.$router.push({
+                path: '/order/comment',
+                query: {
+                    orderNo
                 }
             })
         },

@@ -23,7 +23,7 @@
     <div class="secondBuyContent">
       <el-carousel trigger="click" :autoplay='false' height="260px">
         <el-carousel-item v-for="(x,index) in secondList" :key="index">
-          <div class="listItem" v-for="item in x" :key="item.id" @click="goToDetail(item)">
+          <div class="listItem" v-for="item in x" :key="item.id" @click="goToDetail(item.id)">
             <img :src="item.imgUrl" alt="">
             <span>{{item.title}}</span>
             <em>{{item.price | price}}</em>
@@ -83,11 +83,11 @@ export default {
       },1000)
       
     },
-    goToDetail(item) {
+    goToDetail(id) {
       this.$router.push({
-        path:'/detail',
-        query: {
-          detail: item
+        name:'detail',
+        params: {
+          id
         }
       })
     }
@@ -101,26 +101,26 @@ export default {
       secondList: [
         [
               {
-              id: 1,
+              id: 355,
               title: '三星 SAMSUNG Galaxy S21 Ultra 5G 5G手机 骁龙888 1.08亿像素 120Hz 支持Spen 12GB+256G幽夜黑',
               price: 8169,
               imgUrl: 'https://img20.360buyimg.com/seckillcms/s280x280_jfs/t1/145853/26/19479/105728/60aefa3fE797a4540/8b9bbe6fcb72c567.jpg.webp'
             },
             {
-              id: 2,
+              id: 356,
               title: 'OPPO Reno6 Pro+ 8+128GB 夏日晴海 5000万四摄 索尼IMX766 骁龙870 旗舰拍照 5G手机',
               price: 8169,
               imgUrl: 'https://img10.360buyimg.com/seckillcms/s280x280_jfs/t1/195464/34/16599/129148/610b58feE95c944e6/d19eb687b64f4099.jpg.webp'
             },
             {
-              id: 7,
+              id: 357,
               title: '阿玛尼(Emporio Armani)满天星手表 明星同款 钢质表带时尚休闲石英女士腕表  AR11244',
               price: 3269,
               imgUrl: 'https://img30.360buyimg.com/seckillcms/s280x280_jfs/t1/203914/19/13659/161312/617f8350E4af735bf/b5569461ac7d2f91.jpg.webp'
             },
            
             {
-              id: 4,
+              id: 358,
               title: '小米11 Pro 5G 骁龙888 2K AMOLED四曲面柔性屏 67W无线闪充 3D玻璃工艺 12GB+256GB 黑色 手机',
               price: 8169,
               imgUrl: 'https://img30.360buyimg.com/seckillcms/s280x280_jfs/t1/184244/35/6773/83620/60b4a2a5E9870799f/f131ae58b58ff955.jpg.webp'
@@ -128,19 +128,19 @@ export default {
         ],
         [
             {
-              id: 5,
+              id: 359,
               title: '蒙牛低脂高钙牛奶营养早餐奶整箱礼盒装 250ml*24盒',
               price: 49.9,
               imgUrl: 'https://img13.360buyimg.com/seckillcms/s280x280_jfs/t1/216242/13/2901/197079/61813e41E906806b6/2fdc523c642cdecd.jpg.webp'
             },
             {
-              id: 6,
+              id: 360,
               title: '京库 JINGKU 手工花椒锅巴组合装108g*4袋（五香味2袋+麻辣味2袋）',
               price: 10.90,
               imgUrl : 'https://img10.360buyimg.com/seckillcms/s280x280_jfs/t1/214360/23/2895/181157/618107dfEaf2a8ca7/34526c53a0552df6.jpg.webp'
             },
              {
-              id: 3,
+              id: 361,
               title: '荣耀 Magic3 骁龙888 6.76英寸超曲屏 多主摄计算摄影 66W超级快充 4600mAh大电池 全网通版 8GB+128GB釉白色',
               price: 8169,
               imgUrl: 'https://img30.360buyimg.com/seckillcms/s280x280_jfs/t1/174255/28/26953/50331/6163e4ebE23e01d95/c4fe597820ebd9c7.jpg.webp'

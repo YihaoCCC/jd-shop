@@ -24,6 +24,7 @@ const router = new Router({
                 },   
                 {
                     path: '/detail/:id',
+                    name: 'detail',
                     component: () => import('@/pages/detail')
                 },
                 {
@@ -74,6 +75,10 @@ const router = new Router({
                 {
                     path: 'list',
                     component: () => import('@/pages/orderList')
+                },
+                {
+                    path: 'comment',
+                    component: () => import('@/pages/comment')
                 }   
             ]
         }
