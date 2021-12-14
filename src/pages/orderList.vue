@@ -239,7 +239,8 @@ export default {
                     this.pageNum = 1
                     this.GetAndRefreshUserInfo()
                     this.$message.success('删除订单成功！')
-                    history.go(0)
+                    // history.go(0) 这种方法存在在user数据未到来之前就发送了请求，所以此时强制刷新 发过去的userId是undefind
+                    this.fliterOrderList('全部')
                 } else {
                     this.$message.error('删除失败，请联系管理员重试！')
                 }

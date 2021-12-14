@@ -260,6 +260,7 @@ export default {
         background-color: #f5f5f5;
         padding-bottom:30px;
         text-align: center;
+        min-height: 600px;
         .nullSvg {
             img {
                 height: 400px;

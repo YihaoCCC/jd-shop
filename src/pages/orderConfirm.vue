@@ -57,7 +57,7 @@
                 </div>
                 <div class="summary">
                     <div class="summary-box">
-                        <p>商品件数：<span>{{cartSelectedList.length()  }}件</span></p>
+                        <p>商品件数：<span>{{cartSelectedList.length  }}件</span></p>
                         <p>商品总价：<span>{{totalPrice}}元</span></p>
                         <p>优惠活动：<span>{{promotionPrice}}元</span></p>
                         <p>运费：<span>0元</span></p>

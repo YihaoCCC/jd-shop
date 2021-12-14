@@ -45,20 +45,23 @@ export default {
             })
         },
         submitComment(item) {
-            this.yhRequest.post('/api/review/add', {
-                userId: this.$store.state.user.userId,
-                goodsId: item.goodsId,
-                reviewMessage: item.comment
-            }).then(res => {
-                if(res) {
-                    item.comment = ''
-                    item.isComment = 1
-                    this.$message.success('评论成功！')
-                } else {
-                    console.log('error')
-                }
-            })
-            
+            if(item.comment) {
+                this.yhRequest.post('/api/review/add', {
+                    userId: this.$store.state.user.userId,
+                    goodsId: item.goodsId,
+                    reviewMessage: item.comment
+                }).then(res => {
+                    if(res) {
+                        item.comment = ''
+                        item.isComment = 1
+                        this.$message.success('评论成功！')
+                    } else {
+                        console.log('error')
+                    }
+                })
+            } else {
+                this.$message.waring('评论内容不可为空！')
+            }
         }
     }
 }
