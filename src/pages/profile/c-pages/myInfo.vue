@@ -10,9 +10,9 @@
         </div>
         <div class="content">
             <div class="left">
-                <transition name="el-zoom-in-top">
-                    <div style="width:400px">
-                        <el-form ref="form"   label-width="100px"  v-show="flag===1" >
+                <transition name="el-zoom-in-top" mode="out-in">
+                    <div style="width:400px" v-if="flag===1">
+                        <el-form ref="form"   label-width="100px"   >
                             <el-form-item label="昵称:">
                                 <el-input  :value="nickName" v-model="nickName" maxlength="10" show-word-limit ></el-input>
                                 <button class="changeName" @click.prevent="changeName">修改昵称</button>
@@ -25,9 +25,7 @@
                             </el-form-item>
                         </el-form>
                     </div>
-                </transition>
-                <transition name="el-zoom-in-top">
-                    <el-form v-show="flag===2" style="width:400px" :model="userInfo" status-icon :rules="rules" ref="userInfo" label-width="100px" class="demo-ruleForm">
+                    <el-form v-else style="width:400px" :model="userInfo" status-icon :rules="rules" ref="userInfo" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="原密码：">
                             <el-input v-model="oldPass" type="password" @change="judgeOld"></el-input>
                         </el-form-item>

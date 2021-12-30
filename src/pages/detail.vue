@@ -85,7 +85,12 @@
                 <div class="commentHeader">
                     商品评价
                 </div>
-                <comment v-for="item in commentList" :key="item.reviewId" :CommentDetail='item'></comment>
+                <div v-if="commentList.length">
+                    <comment v-for="item in commentList" :key="item.reviewId" :CommentDetail='item'></comment>
+                </div>
+                <div v-else style="text-align: center;margin: 30px 0">
+                    <h1>该商品暂无评价</h1>
+                </div>
             </div>
         </div>
         
@@ -227,11 +232,9 @@ export default {
             this.$router.push('/collect')
         },
         GoOrderConfrim() {
-            if(this.userName) {
-               this.$router.push('/')
-            } else {
-                this.$store.dispatch('changeIsShow' ,true)
-            }
+           
+            this.$router.push('/')
+
         }
     }
 }
